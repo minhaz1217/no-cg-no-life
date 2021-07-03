@@ -1,19 +1,23 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-// #docregion AppLocalizationsImport
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-// #enddocregion AppLocalizationsImport
+import 'package:no_cg_no_life_app/models/GenericURLRedirectionCardListPageModel.dart';
+import 'package:no_cg_no_life_app/router/route_provider.dart';
+import 'package:no_cg_no_life_app/screens/sharedComponents/generic_list_with_top_icon_view/generic_url_redirection_card_list_page.dart';
+import 'package:no_cg_no_life_app/screens/views/home/home_view.dart';
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'No CG No Life',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -28,57 +32,17 @@ class MyApp extends StatelessWidget {
         const Locale("en", ""),
         const Locale("bn", "")
       ],
-
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-                AppLocalizations.of(context)!.appName
-            ),
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ),
+      initialRoute: "/",
+      onGenerateRoute: RouteProvider.generateRoute,
+      home: GenericURLRedirectionCardListPage( GenericURLRedirectionCardListPageModel( pageTitle: "Department", pageIcon: Icons.add, children: [
+        URLRedirectionCardModel( title: "Title 1", url: "http://www.google.com", imagePath: "assets/icons/cgpa.png" ),
+        URLRedirectionCardModel( title: "Title 2", url: "http://www.google.com", imagePath: "assets/icons/cgpa.png" ),
+        URLRedirectionCardModel( title: "Title 3", url: "http://www.google.com", imagePath: "assets/icons/cgpa.png" ),
+        URLRedirectionCardModel( title: "Title 4", url: "http://www.google.com", imagePath: "assets/icons/cgpa.png" ),
+        URLRedirectionCardModel( title: "Title 5", url: "http://www.google.com", imagePath: "assets/icons/cgpa.png" ),
+        URLRedirectionCardModel( title: "Title 6", url: "http://www.google.com", imagePath: "assets/icons/cgpa.png" ),
+        // URLRedirectionCardModel( title: "Title 6", url: "http://www.google.com", cardIcon: Icons.add ),
+      ]) ),
     );
   }
 }

@@ -1,0 +1,4 @@
+enum  RedirectionType{
+  PageRedirection,
+  URLRedirection,
+}

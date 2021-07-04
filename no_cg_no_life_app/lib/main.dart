@@ -34,15 +34,16 @@ class MyApp extends StatelessWidget {
       ],
       initialRoute: "/",
       onGenerateRoute: RouteProvider.generateRoute,
-      home: GenericURLRedirectionCardListPage( GenericURLRedirectionCardListPageModel( pageTitle: "Department", pageIcon: Icons.add, children: [
-        URLRedirectionCardModel( title: "Title 1", url: "http://www.google.com", imagePath: "assets/icons/cgpa.png" ),
-        URLRedirectionCardModel( title: "Title 2", url: "http://www.google.com", imagePath: "assets/icons/cgpa.png" ),
-        URLRedirectionCardModel( title: "Title 3", url: "http://www.google.com", imagePath: "assets/icons/cgpa.png" ),
-        URLRedirectionCardModel( title: "Title 4", url: "http://www.google.com", imagePath: "assets/icons/cgpa.png" ),
-        URLRedirectionCardModel( title: "Title 5", url: "http://www.google.com", imagePath: "assets/icons/cgpa.png" ),
-        URLRedirectionCardModel( title: "Title 6", url: "http://www.google.com", imagePath: "assets/icons/cgpa.png" ),
-        // URLRedirectionCardModel( title: "Title 6", url: "http://www.google.com", cardIcon: Icons.add ),
-      ]) ),
+      home: HomeView()
+      // GenericURLRedirectionCardListPage( GenericURLRedirectionCardListPageModel( pageTitle: "Department", pageIcon: Icons.add, children: [
+      //   URLRedirectionCardModel( title: "Title 1", url: "http://www.google.com", imagePath: "assets/icons/cgpa.png" ),
+      //   URLRedirectionCardModel( title: "Title 2", url: "http://www.google.com", imagePath: "assets/icons/cgpa.png" ),
+      //   URLRedirectionCardModel( title: "Title 3", url: "http://www.google.com", imagePath: "assets/icons/cgpa.png" ),
+      //   URLRedirectionCardModel( title: "Title 4", url: "http://www.google.com", imagePath: "assets/icons/cgpa.png" ),
+      //   URLRedirectionCardModel( title: "Title 5", url: "http://www.google.com", imagePath: "assets/icons/cgpa.png" ),
+      //   URLRedirectionCardModel( title: "Title 6", url: "http://www.google.com", imagePath: "assets/icons/cgpa.png" ),
+      //   // URLRedirectionCardModel( title: "Title 6", url: "http://www.google.com", cardIcon: Icons.add ),
+      // ]) ),
     );
   }
 }

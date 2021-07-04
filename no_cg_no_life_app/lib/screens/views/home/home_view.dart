@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:no_cg_no_life_app/configs/basic_menu_static_data.dart';
+import 'package:no_cg_no_life_app/configs/image_path_configs.dart';
+import 'package:no_cg_no_life_app/helpers/dynamic_size_config.dart';
+import 'package:no_cg_no_life_app/screens/sharedComponents/generic_menu_card/generic_menu_card.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomeView extends StatefulWidget {
@@ -9,19 +13,20 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Home"),
-      ),
-      body: Container(
-          child: Text("Hello World")
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          var _url = "https://flutter.dev";
-          await canLaunch(_url) ? await launch(_url) : throw 'Could not launch $_url';
-        },
-      ),
-    );
+    DynamicSizeConfig().init(context);
+    return
+      Scaffold(
+        body:Container(
+            child:  SafeArea(
+              child: GridView.count(
+                crossAxisCount: 2,
+                padding: EdgeInsets.symmetric( horizontal: 16, vertical: 16 ),
+                children: [
+                  GenericMenuCard(title: BasicMenuStaticData.QuickLinks.title, imagePath: BasicMenuStaticData.QuickLinks.imagePath, onPressed: (){Navigator.pushNamed(context, BasicMenuStaticData.QuickLinks.url);})
+                ],
+              ),
+            )
+        ) ,
+      );
   }
 }

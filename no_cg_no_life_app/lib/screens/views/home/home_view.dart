@@ -22,7 +22,9 @@ class _HomeViewState extends State<HomeView> {
                 crossAxisCount: 2,
                 padding: EdgeInsets.symmetric( horizontal: 16, vertical: 16 ),
                 children: [
-                  GenericMenuCard(title: BasicMenuStaticData.QuickLinks.title, imagePath: BasicMenuStaticData.QuickLinks.imagePath, onPressed: (){Navigator.pushNamed(context, BasicMenuStaticData.QuickLinks.url);})
+                  GenericMenuCard(title: BasicMenuStaticData.QuickLinks.title, imagePath: BasicMenuStaticData.QuickLinks.imagePath, onPressed: (){Navigator.pushNamed(context, BasicMenuStaticData.QuickLinks.url);}),
+                  GenericMenuCard(title: "CGPA Calculator", imagePath: "assets/icons/cgpa.png", onPressed: (){Navigator.pushNamed(context, "/cgpa-calculator");}),
+
                 ],
               ),
             )

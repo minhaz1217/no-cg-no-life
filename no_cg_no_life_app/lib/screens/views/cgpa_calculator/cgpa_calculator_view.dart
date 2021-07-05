@@ -28,10 +28,11 @@ class _CGPACalculatorViewState extends State<CGPACalculatorView> {
   List<_CourseTextFieldController> coursesControllers = <_CourseTextFieldController>[];
   late _CourseTextFieldController historyTextFieldsController;
   late CGPACalculatorModel model;
-
+  late GlobalKey<FormState> _formKey;
 
 
   _CGPACalculatorViewState(){
+    _formKey = GlobalKey<FormState>();
     this.model = CGPACalculatorModel();
     // TODO: load already saved data from shared_pref
 
@@ -60,38 +61,41 @@ class _CGPACalculatorViewState extends State<CGPACalculatorView> {
       }
     }
   }
+
   calculateCGPA(){
-    double historyCGPA = 0, historyCredit = 0;
-    print(historyTextFieldsController.cgpaTextField.text);
-    print(double.tryParse(historyTextFieldsController.cgpaTextField.text.trim()));
-    if(double.tryParse(historyTextFieldsController.cgpaTextField.text.trim()) != null){
-      historyCGPA = double.tryParse(historyTextFieldsController.cgpaTextField.text.trim())!;
-    }else{
-      // TODO: handle these errors.
-      throw Exception("CGPA is invalid");
-    }
+    if (_formKey.currentState!.validate()) {
+      double historyCGPA = 0, historyCredit = 0;
+      print(historyTextFieldsController.cgpaTextField.text);
+      print(double.tryParse(historyTextFieldsController.cgpaTextField.text.trim()));
+      if(double.tryParse(historyTextFieldsController.cgpaTextField.text.trim()) != null){
+        historyCGPA = double.tryParse(historyTextFieldsController.cgpaTextField.text.trim())!;
+      }else{
+        // TODO: handle these errors.
+        throw Exception("CGPA is invalid");
+      }
 
-    if(double.tryParse(historyTextFieldsController.creditsTextField.text.trim()) != null){
-      historyCredit = double.tryParse(historyTextFieldsController.creditsTextField.text.trim())!;
-    }else{
-      throw Exception("Credit is invalid");
-    }
+      if(double.tryParse(historyTextFieldsController.creditsTextField.text.trim()) != null){
+        historyCredit = double.tryParse(historyTextFieldsController.creditsTextField.text.trim())!;
+      }else{
+        throw Exception("Credit is invalid");
+      }
 
-    if(historyCGPA < 0 || historyCGPA > 4.00){
-      throw Exception( "CGPA should be between 0 and 4 inclusive." );
-    }
+      if(historyCGPA < 0 || historyCGPA > 4.00){
+        throw Exception( "CGPA should be between 0 and 4 inclusive." );
+      }
 
 
-    double finalCGPA = historyCGPA * historyCredit;
-    double totalCredits = historyCredit;
-    for(int i=0;i<model.currentCourses.length;i++){
-      finalCGPA += model.currentCourses[i].credit * model.currentCourses[i].cgpa;
-      totalCredits += model.currentCourses[i].credit;
+      double finalCGPA = historyCGPA * historyCredit;
+      double totalCredits = historyCredit;
+      for(int i=0;i<model.currentCourses.length;i++){
+        finalCGPA += model.currentCourses[i].credit * model.currentCourses[i].cgpa;
+        totalCredits += model.currentCourses[i].credit;
+      }
+      finalCGPA = finalCGPA/totalCredits.roundToDouble();
+      finalCGPA = double.parse(finalCGPA.toStringAsFixed(2));
+      // TODO: now add the circular progression with animation to show this.
+      print("FINAL CGPA ${finalCGPA}");
     }
-    finalCGPA = finalCGPA/totalCredits.roundToDouble();
-    finalCGPA = double.parse(finalCGPA.toStringAsFixed(2));
-    // TODO: now add the circular progression with animation to show this.
-    print("FINAL CGPA ${finalCGPA}");
   }
 
   addNewCourse(){
@@ -115,20 +119,55 @@ class _CGPACalculatorViewState extends State<CGPACalculatorView> {
 
   @override
   Widget build(BuildContext context) {
-    Widget generateTextFieldsForPrevious(){
+
+    Widget generateTextFieldsForHistory(){
       return Row(
         children: [
           Expanded(
             flex: 2,
-            child: CGPACalculatorTextField(hintText: "Previous",readOnly: true, textEditingController: historyTextFieldsController.courseTextField,),
+            child: CGPACalculatorTextField(
+              hintText: "Previous",
+              readOnly: true,
+              textEditingController: historyTextFieldsController.courseTextField,
+            ),
           ),
           Expanded(
             flex: 2,
-            child: CGPACalculatorTextField(hintText: "Credits",readOnly: false, textEditingController: historyTextFieldsController.creditsTextField, keyboardType: TextInputType.number),
+            child: CGPACalculatorTextField(
+                hintText: "Credits",
+                readOnly: false,
+                textEditingController: historyTextFieldsController.creditsTextField,
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if(value == null || value.isEmpty){
+                    return "Empty";
+                  }else if(double.tryParse(value) == null){
+                    return "Invalid";
+                  }else if( double.tryParse(value)! < 0 || double.tryParse(value)! >200 ){
+                    return "0-200 allowed";
+                  }
+                  return null;
+                },
+            ),
           ),
           Expanded(
             flex: 2,
-            child: CGPACalculatorTextField(hintText: "CGPA",readOnly: false, textEditingController: historyTextFieldsController.cgpaTextField, keyboardType: TextInputType.number,),
+            child: CGPACalculatorTextField(
+              hintText: "CGPA",
+              readOnly: false,
+              textEditingController: historyTextFieldsController.cgpaTextField,
+              keyboardType: TextInputType.number,
+              validator: (value) {
+                if(value == null || value.isEmpty){
+                  return "Empty";
+                }else if(double.tryParse(value) == null){
+                  return "Invalid";
+                }else if( double.tryParse(value)! < 0 || double.tryParse(value)! >4 ){
+                  return "0-4 allowed";
+                }
+                return null;
+              }
+            ),
           ),
           Expanded(
             flex: 1,
@@ -141,8 +180,8 @@ class _CGPACalculatorViewState extends State<CGPACalculatorView> {
         ],
       );
     }
-    double dropdownValue = 1;
-    List<Widget> generateChildren(){
+
+    List<Widget> generateDataInputingRows(){
       var output = <Widget>[];
       for(int i=0;i<this.model.currentCourses.length;i++){
         var currentCourse = this.model.currentCourses[i];
@@ -219,16 +258,23 @@ class _CGPACalculatorViewState extends State<CGPACalculatorView> {
           ],
         ));
       }
+
+      output.add(SizedBox(
+        height: 80,
+      ));
       return output;
     }
     return Scaffold(
       appBar: AppBar( title: Text("CGPA Calculator"),elevation: 0, ),
-      body: ListView(
-        children: [
-          CGPACalculatorHeaderSection(),
-          generateTextFieldsForPrevious(),
-          ...generateChildren()
-        ],
+      body: Form(
+        key: _formKey,
+        child: ListView(
+          children: [
+            CGPACalculatorHeaderSection(),
+            generateTextFieldsForHistory(),
+            ...generateDataInputingRows()
+          ],
+        ),
       ),
       floatingActionButtonLocation:
         FloatingActionButtonLocation.centerDocked,
@@ -238,6 +284,7 @@ class _CGPACalculatorViewState extends State<CGPACalculatorView> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               FloatingActionButton(
+                heroTag: "leftButton",
                 backgroundColor: BrandColor,
                 child: Icon(Icons.add),
                 onPressed: () {
@@ -247,6 +294,7 @@ class _CGPACalculatorViewState extends State<CGPACalculatorView> {
                 },
               ),
               FloatingActionButton(
+                heroTag: "rightButton",
                 backgroundColor: SuccessColor,
                 child: Icon(Icons.done),
                 onPressed: () {

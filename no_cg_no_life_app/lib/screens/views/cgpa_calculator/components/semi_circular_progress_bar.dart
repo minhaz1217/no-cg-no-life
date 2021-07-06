@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
@@ -16,7 +17,7 @@ class SemiCircularProgressBar extends StatefulWidget {
     this.startValue = 0,
     this.endValue = 100,
     this.finalValue = 50,
-    this.animationDuration = const Duration( seconds: 5),
+    this.animationDuration = const Duration( seconds: 1),
     this.finalValueDecimalDigit = 0,
     this.bottomText = "Progress",
     this.progressDoneColor = Colors.blue,
@@ -29,41 +30,19 @@ class SemiCircularProgressBar extends StatefulWidget {
 }
 
 class _SemiCircularProgressBarState extends State<SemiCircularProgressBar> with TickerProviderStateMixin {
-  double progresValue = 10;
-  late Timer _timer;
   @override
   void initState() {
     super.initState();
-    progresValue = widget.startValue;
-    // TODO : make tween type animation calculation.
-    _timer = Timer.periodic(
-        const Duration( milliseconds:  100 ),
-          (timer){
-          double incrementValue =   ((widget.finalValue - widget.startValue).abs() / widget.animationDuration.inMilliseconds)*100;
-          if(progresValue < widget.finalValue){
-            setState(() {
-              progresValue = (progresValue + incrementValue) % widget.endValue;
-            });
-          }else{
-            progresValue = widget.finalValue;
-            timer.cancel();
-          }
-        }
-    );
-
   }
+
 
   @override
   void dispose() {
-    if(_timer != null){
-      _timer.cancel();
-    }
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-
     return SfRadialGauge(axes: <RadialAxis>[
       RadialAxis(
           minimum: widget.startValue,
@@ -80,13 +59,13 @@ class _SemiCircularProgressBarState extends State<SemiCircularProgressBar> with 
           pointers: <GaugePointer>[
             RangePointer(
               color: widget.progressDoneColor,
-              value: progresValue,
+              value: widget.finalValue,
               cornerStyle: CornerStyle.bothCurve,
               width: 0.12,
               sizeUnit: GaugeSizeUnit.factor,
               enableAnimation: true,
-              animationDuration: 1,
-              animationType: AnimationType.elasticOut,
+              animationDuration: widget.animationDuration.inMilliseconds.toDouble(),
+              animationType: AnimationType.ease,
             )
           ],
           // annotation
@@ -95,15 +74,15 @@ class _SemiCircularProgressBarState extends State<SemiCircularProgressBar> with 
                 positionFactor: 0.1,
                 angle: 90,
                 widget: Text(
-                  progresValue.toStringAsFixed(widget.finalValueDecimalDigit),
+                  widget.finalValue.toStringAsFixed(widget.finalValueDecimalDigit), // TODO: try to make it so that this value reflect the progress bar value along with animation. maybe need to research this package further to achieve this.
                   style: TextStyle(fontSize: 24, color: Colors.white),
                 )),
             GaugeAnnotation(
-                positionFactor: 1,
+                positionFactor: .8,
                 angle: 90,
                 widget: Text(
                   widget.bottomText,
-                  style: TextStyle(fontSize: 24, color: Colors.white70),
+                  style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
                 )),
           ])
     ]);

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:no_cg_no_life_app/configs/static_datas.dart';
 import 'package:no_cg_no_life_app/helpers/cgpa_helper.dart';
 import 'package:no_cg_no_life_app/helpers/colors_utils.dart';
+import 'package:no_cg_no_life_app/models/CGPACalculatorHeaderNotifierModel.dart';
 import 'package:no_cg_no_life_app/models/CGPACalculatorModel.dart';
 import 'package:no_cg_no_life_app/screens/views/cgpa_calculator/components/cgpa_calculator_header_section.dart';
 import 'package:no_cg_no_life_app/screens/views/cgpa_calculator/components/cgpa_calculator_text_field.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class CGPACalculatorView extends StatefulWidget {
   @override
@@ -29,13 +32,13 @@ class _CGPACalculatorViewState extends State<CGPACalculatorView> {
   late _CourseTextFieldController historyTextFieldsController;
   late CGPACalculatorModel model;
   late GlobalKey<FormState> _formKey;
-
-
+  late CGPACalculatorHeaderNotifierModel _cgpaCalculatorHeaderNotifierModel;
   _CGPACalculatorViewState(){
-    _formKey = GlobalKey<FormState>();
+    this._formKey = GlobalKey<FormState>();
+    this._cgpaCalculatorHeaderNotifierModel = CGPACalculatorHeaderNotifierModel();
     this.model = CGPACalculatorModel();
-    // TODO: load already saved data from shared_pref
 
+    // TODO: load already saved data from shared_pref
     // making data for the history row and initializing its text controllers
     this.model.history = CGPATextModel(courseName: "Previous", cgpa: 0,credit: 0);
     this.historyTextFieldsController = _CourseTextFieldController(
@@ -60,17 +63,28 @@ class _CGPACalculatorViewState extends State<CGPACalculatorView> {
         );
       }
     }
+
+    // initializing the header notifier model
+    this._cgpaCalculatorHeaderNotifierModel.finalCredit = this.model.finalCredits;
+    this._cgpaCalculatorHeaderNotifierModel.finalCGPA = this.model.finalCGPA;
   }
 
+  @override
+  void initState() {
+    super.initState();
+    if (SchedulerBinding.instance!.schedulerPhase == SchedulerPhase.persistentCallbacks) {
+      SchedulerBinding.instance!.addPostFrameCallback((_) => calculateCGPA());
+    }
+  }
+
+  // TODO: maybe recalculate cgpa(& trigger animation) after any valid value entry in any of the fields?
   calculateCGPA(){
     if (_formKey.currentState!.validate()) {
       double historyCGPA = 0, historyCredit = 0;
-      print(historyTextFieldsController.cgpaTextField.text);
-      print(double.tryParse(historyTextFieldsController.cgpaTextField.text.trim()));
       if(double.tryParse(historyTextFieldsController.cgpaTextField.text.trim()) != null){
         historyCGPA = double.tryParse(historyTextFieldsController.cgpaTextField.text.trim())!;
       }else{
-        // TODO: handle these errors.
+        // TODO: handle these errors. show it in front somehow
         throw Exception("CGPA is invalid");
       }
 
@@ -85,16 +99,21 @@ class _CGPACalculatorViewState extends State<CGPACalculatorView> {
       }
 
 
-      double finalCGPA = historyCGPA * historyCredit;
-      double totalCredits = historyCredit;
+      var finalCGPA = historyCGPA * historyCredit;
+      var _finalCredits = historyCredit;
       for(int i=0;i<model.currentCourses.length;i++){
         finalCGPA += model.currentCourses[i].credit * model.currentCourses[i].cgpa;
-        totalCredits += model.currentCourses[i].credit;
+        _finalCredits += model.currentCourses[i].credit;
       }
-      finalCGPA = finalCGPA/totalCredits.roundToDouble();
+      finalCGPA = finalCGPA/_finalCredits.roundToDouble();
       finalCGPA = double.parse(finalCGPA.toStringAsFixed(2));
-      // TODO: now add the circular progression with animation to show this.
-      print("FINAL CGPA ${finalCGPA}");
+
+      this._cgpaCalculatorHeaderNotifierModel.finalCGPA = finalCGPA;
+      this._cgpaCalculatorHeaderNotifierModel.finalCredit = _finalCredits;
+      this._cgpaCalculatorHeaderNotifierModel.notifyListeners();
+      setState(() {
+
+      });
     }
   }
 
@@ -119,7 +138,6 @@ class _CGPACalculatorViewState extends State<CGPACalculatorView> {
 
   @override
   Widget build(BuildContext context) {
-
     Widget generateTextFieldsForHistory(){
       return Row(
         children: [
@@ -144,6 +162,7 @@ class _CGPACalculatorViewState extends State<CGPACalculatorView> {
                   }else if(double.tryParse(value) == null){
                     return "Invalid";
                   }else if( double.tryParse(value)! < 0 || double.tryParse(value)! >200 ){
+                    // TODO: can the credits be like 11.8? do we have any half credits? like 2.5 credit course?, if yes then add validation for only 2.5 credts. otherwise partial credits should be counted
                     return "0-200 allowed";
                   }
                   return null;
@@ -158,11 +177,11 @@ class _CGPACalculatorViewState extends State<CGPACalculatorView> {
               textEditingController: historyTextFieldsController.cgpaTextField,
               keyboardType: TextInputType.number,
               validator: (value) {
-                if(value == null || value.isEmpty){
+                if(value == null || value.isEmpty){ // value can't be empty
                   return "Empty";
-                }else if(double.tryParse(value) == null){
+                }else if(double.tryParse(value) == null){ // field value can't be null
                   return "Invalid";
-                }else if( double.tryParse(value)! < 0 || double.tryParse(value)! >4 ){
+                }else if( double.tryParse(value)! < 0 || double.tryParse(value)! >4 ){ // cgpa must be between 0-4 inclusive
                   return "0-4 allowed";
                 }
                 return null;
@@ -264,13 +283,25 @@ class _CGPACalculatorViewState extends State<CGPACalculatorView> {
       ));
       return output;
     }
+
     return Scaffold(
-      appBar: AppBar( title: Text("CGPA Calculator"),elevation: 0, ),
+      appBar: AppBar(
+        title: Text("CGPA Calculator"), // TODO: translation.
+        elevation: 0,
+      ),
       body: Form(
         key: _formKey,
         child: ListView(
           children: [
-            CGPACalculatorHeaderSection(),
+            // this will make the _cgpaCalculatorHeaderNotifierModel available to the children under it if they request it.
+            ScopedModel<CGPACalculatorHeaderNotifierModel>(
+                model: this._cgpaCalculatorHeaderNotifierModel,
+                child: new ScopedModelDescendant<CGPACalculatorHeaderNotifierModel>(
+                  builder: (context, child, model){
+                      return CGPACalculatorHeaderSection( finalCredit: model.finalCredit, finalCGPA: model.finalCGPA,);
+                    },
+                )
+            ),
             generateTextFieldsForHistory(),
             ...generateDataInputingRows()
           ],

@@ -29,3 +29,26 @@ String DayOfTheWeekToString(DayOfTheWeek dayOfTheWeek){
       return "";
   }
 }
+
+DayOfTheWeek StringToDayOfTheWeek(String day){
+  day = day.toLowerCase();
+  switch(day){
+    case "monday":
+      return DayOfTheWeek.Monday;
+    case "tuesday":
+      return DayOfTheWeek.Tuesday;
+    case "wednesday":
+      return DayOfTheWeek.Wednesday;
+    case "thursday":
+      return DayOfTheWeek.Thursday;
+    case "friday":
+      return DayOfTheWeek.Friday;
+    case "saturday":
+      return DayOfTheWeek.Saturday;
+    case "sunday":
+      return DayOfTheWeek.Sunday;
+    default:
+      return DayOfTheWeek.NULLDAY;
+  }
+
+}

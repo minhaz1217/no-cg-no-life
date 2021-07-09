@@ -21,7 +21,6 @@ dependencies:
   syncfusion_flutter_gauges: ^19.2.44
   scoped_model: ^2.0.0-nullsafety.0 # TODO: update this version to a stable version if a stable version is released.
 
-
   cupertino_icons: ^1.0.2
 
 dev_dependencies:

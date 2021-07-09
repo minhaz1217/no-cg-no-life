@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:no_cg_no_life_app/enums/DayOfTheWeek.dart';
 import 'package:no_cg_no_life_app/helpers/localization_helper.dart';
 import 'package:no_cg_no_life_app/models/FormTextFieldMustHave.dart';
 import 'package:no_cg_no_life_app/screens/sharedComponents/generic_text_field/generic_text_field.dart';
@@ -61,11 +65,77 @@ class _CreateAdvisingCourseFormControllers{
 class _CreateAdvisingCourseState extends State<CreateAdvisingCourse> {
   late GlobalKey<FormState> _formKey;
   late _CreateAdvisingCourseFormControllers controllers;
+  late Map<String, bool> dayOfTheWeekCheckBoxMap;
+
   _CreateAdvisingCourseState(){
     this._formKey = GlobalKey<FormState>();
     this.controllers = _CreateAdvisingCourseFormControllers();
+    dayOfTheWeekCheckBoxMap = Map<String,bool>();
+    DayOfTheWeek.values.forEach((e){
+      if(e != DayOfTheWeek.NULLDAY){
+        dayOfTheWeekCheckBoxMap[ DayOfTheWeekToString(e) ] = false;
+      }
+    });
   }
 
+  toggleDayOfTheWeek(String key){
+    int counter = 0;
+    String lastEnabledKey = "";
+    dayOfTheWeekCheckBoxMap.forEach((key2, value) {
+      if(value == true){
+        counter++;
+        lastEnabledKey = key2;
+      }
+    });
+    if(counter >= 2 && dayOfTheWeekCheckBoxMap[key] == false){
+      dayOfTheWeekCheckBoxMap[lastEnabledKey] = false;
+    }
+    dayOfTheWeekCheckBoxMap[key] = dayOfTheWeekCheckBoxMap[key] == true ? false : true;
+  }
+
+
+  // TODO: try to generalize this function so that we can generate list from the enum directly, and remove some enums if we want.
+  // generating checkboxes for the day selector.
+  List<Widget> generateWeekDayPicker(){
+    List<Widget> weekDaysWidget = List<Widget>.empty(growable: true);
+    dayOfTheWeekCheckBoxMap.forEach((key, value){
+      bool currentValue = dayOfTheWeekCheckBoxMap[key]!;
+      weekDaysWidget.add(
+          Container(
+            margin: EdgeInsets.only(right: 4),
+            child: OutlinedButton.icon(
+                icon: Icon( currentValue? Icons.check_circle : Icons.check_circle_outline),
+                label: Text("$key"),
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0))),
+                ),
+                onPressed: (){
+                  toggleDayOfTheWeek(key);
+                    setState(() {});
+                },
+            ),
+          )
+      );
+    }
+    );
+
+    return [
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text("Select week day"),
+      ),
+      Container(
+        height: 50,
+        padding: const EdgeInsets.all(8.0),
+        child: ListView(
+          scrollDirection: Axis.horizontal,
+          children: weekDaysWidget ,
+        ),
+      )
+    ];
+
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,7 +163,7 @@ class _CreateAdvisingCourseState extends State<CreateAdvisingCourse> {
               validator: this.controllers.facultyTextFieldController.validator,
               hintText:   T(context)!.createAdvisingCourseFacultyHint,
             ),
-
+            ...generateWeekDayPicker(),
           ],
         ),
       ),

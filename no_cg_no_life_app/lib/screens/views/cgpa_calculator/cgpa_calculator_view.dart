@@ -5,9 +5,11 @@ import 'package:no_cg_no_life_app/helpers/cgpa_helper.dart';
 import 'package:no_cg_no_life_app/helpers/colors_utils.dart';
 import 'package:no_cg_no_life_app/models/CGPACalculatorHeaderNotifierModel.dart';
 import 'package:no_cg_no_life_app/models/CGPACalculatorModel.dart';
+import 'package:no_cg_no_life_app/screens/sharedComponents/generic_text_field/generic_text_field.dart';
 import 'package:no_cg_no_life_app/screens/views/cgpa_calculator/components/cgpa_calculator_header_section.dart';
-import 'package:no_cg_no_life_app/screens/views/cgpa_calculator/components/cgpa_calculator_text_field.dart';
 import 'package:scoped_model/scoped_model.dart';
+
+// CGPACalculatorView is the view page for CGPA Calculator.
 
 class CGPACalculatorView extends StatefulWidget {
   @override
@@ -143,7 +145,7 @@ class _CGPACalculatorViewState extends State<CGPACalculatorView> {
         children: [
           Expanded(
             flex: 2,
-            child: CGPACalculatorTextField(
+            child: GenericTextField(
               hintText: "Previous",
               readOnly: true,
               textEditingController: historyTextFieldsController.courseTextField,
@@ -151,7 +153,7 @@ class _CGPACalculatorViewState extends State<CGPACalculatorView> {
           ),
           Expanded(
             flex: 2,
-            child: CGPACalculatorTextField(
+            child: GenericTextField(
                 hintText: "Credits",
                 readOnly: false,
                 textEditingController: historyTextFieldsController.creditsTextField,
@@ -171,7 +173,7 @@ class _CGPACalculatorViewState extends State<CGPACalculatorView> {
           ),
           Expanded(
             flex: 2,
-            child: CGPACalculatorTextField(
+            child: GenericTextField(
               hintText: "CGPA",
               readOnly: false,
               textEditingController: historyTextFieldsController.cgpaTextField,
@@ -208,7 +210,7 @@ class _CGPACalculatorViewState extends State<CGPACalculatorView> {
           children: [
             Expanded(
               flex: 2,
-              child: CGPACalculatorTextField(hintText: currentCourse.courseName, textEditingController:  coursesControllers[i].courseTextField ,),
+              child: GenericTextField(hintText: currentCourse.courseName, textEditingController:  coursesControllers[i].courseTextField ,),
             ),
             Expanded(
               flex: 2,
@@ -289,6 +291,7 @@ class _CGPACalculatorViewState extends State<CGPACalculatorView> {
         title: Text("CGPA Calculator"), // TODO: translation.
         elevation: 0,
       ),
+
       body: Form(
         key: _formKey,
         child: ListView(
@@ -307,7 +310,8 @@ class _CGPACalculatorViewState extends State<CGPACalculatorView> {
           ],
         ),
       ),
-      floatingActionButtonLocation:
+
+        floatingActionButtonLocation:
         FloatingActionButtonLocation.centerDocked,
         floatingActionButton: Padding(
           padding: const EdgeInsets.all(16.0),

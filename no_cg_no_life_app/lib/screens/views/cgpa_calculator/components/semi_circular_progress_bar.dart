@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
+// SemiCircularProgressBar is used to show the animated circular bar on top of CGPA Calculator.
+
 class SemiCircularProgressBar extends StatefulWidget {
   final double startValue;
   final double endValue;

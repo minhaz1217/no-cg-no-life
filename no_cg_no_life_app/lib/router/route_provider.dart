@@ -1,5 +1,7 @@
 
 import 'package:flutter/material.dart';
+import 'package:no_cg_no_life_app/screens/views/advising_course_crud/create_advising_course.dart';
+import 'package:no_cg_no_life_app/screens/views/advising_helper/advising_helper_view.dart';
 import 'package:no_cg_no_life_app/screens/views/cgpa_calculator/cgpa_calculator_view.dart';
 import 'package:no_cg_no_life_app/screens/views/home/home_view.dart';
 import 'package:no_cg_no_life_app/screens/views/quick_links/quick_links.dart';
@@ -17,6 +19,9 @@ class RouteProvider {
       case '/home': return PageTransition(child: HomeView(),curve: Curves.linear,type: PageTransitionType.rightToLeft);
       case '/quick-links': return PageTransition(child: QuickLinks(),curve: Curves.linear,type: PageTransitionType.rightToLeft);
       case '/cgpa-calculator': return PageTransition(child: CGPACalculatorView(),curve: Curves.linear,type: PageTransitionType.rightToLeft);
+      case '/advising-helper': return PageTransition(child: AdvisingHelperView(),curve: Curves.linear,type: PageTransitionType.rightToLeft);
+
+      case '/create-advising-course': return PageTransition(child: CreateAdvisingCourse(),curve: Curves.linear,type: PageTransitionType.rightToLeft);
 
 
       default:

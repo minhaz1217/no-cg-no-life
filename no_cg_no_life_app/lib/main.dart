@@ -28,10 +28,7 @@ class MyApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate
       ],
-      supportedLocales: [
-        const Locale("en", ""),
-        const Locale("bn", "")
-      ],
+      supportedLocales: AppLocalizations.supportedLocales,
       initialRoute: "/",
       onGenerateRoute: RouteProvider.generateRoute,
       home: HomeView()

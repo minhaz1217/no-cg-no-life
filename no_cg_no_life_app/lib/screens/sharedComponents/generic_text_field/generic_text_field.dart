@@ -1,19 +1,21 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
-class CGPACalculatorTextField extends StatefulWidget {
+// GenericTextField is used throughout the app to take input.
+
+class GenericTextField extends StatefulWidget {
+  // TODO: later remove the seperate controller and validator, and use the FormTextFieldMustHave and adjust all the classes accordingly.
   final TextEditingController textEditingController;
   final String hintText;
   final bool readOnly;
   final TextInputType keyboardType;
   final FormFieldValidator<String>? validator;
-  CGPACalculatorTextField({ required this.textEditingController, this.hintText = "", this.readOnly = false, this.keyboardType = TextInputType.text, this.validator });
+  GenericTextField({ required this.textEditingController, this.hintText = "", this.readOnly = false, this.keyboardType = TextInputType.text, this.validator });
   @override
-  _CGPACalculatorTextFieldState createState() => _CGPACalculatorTextFieldState();
+  _GenericTextFieldState createState() => _GenericTextFieldState();
 }
 
-class _CGPACalculatorTextFieldState extends State<CGPACalculatorTextField> {
+class _GenericTextFieldState extends State<GenericTextField> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -25,7 +27,7 @@ class _CGPACalculatorTextFieldState extends State<CGPACalculatorTextField> {
         decoration: InputDecoration(
           contentPadding: EdgeInsets.all(8),
           hintText: widget.hintText,
-            border: OutlineInputBorder(),
+          border: OutlineInputBorder(),
         ),
         keyboardType: widget.keyboardType,
       ),

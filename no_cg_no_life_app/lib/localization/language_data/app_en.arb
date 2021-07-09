@@ -1,3 +1,7 @@
 {
-    "appName": "No CG No Life"
+    "appName": "No CG No Life",
+    "createAdvisingCourse" : "Create Advising Course",
+    "createAdvisingCourseCourseCodeHint" : "Course Code",
+    "createAdvisingCourseSectionHint" : "Section",
+    "createAdvisingCourseFacultyHint" : "Faculty Initials"
 }

@@ -5,6 +5,8 @@ import 'package:no_cg_no_life_app/models/CGPACalculatorHeaderNotifierModel.dart'
 import 'package:no_cg_no_life_app/screens/views/cgpa_calculator/components/semi_circular_progress_bar.dart';
 import 'package:scoped_model/scoped_model.dart';
 
+// CGPACalculatorHeaderSection is the header section of CGPA Calculator.
+
 class CGPACalculatorHeaderSection extends StatefulWidget {
   final double finalCGPA;
   final double finalCredit;

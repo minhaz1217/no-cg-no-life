@@ -23,19 +23,17 @@ class _CreateAdvisingCourseFormControllers{
   FormTextFieldMustHave courseCodeTextFieldController;
   FormTextFieldMustHave sectionTextFieldController;
   FormTextFieldMustHave facultyTextFieldController;
-  FormTextFieldMustHave day1StartTime;
   _CreateAdvisingCourseFormControllers( { String defaultCourseCode = "", int defaultSection = 0, String defaultFaculty = "" } ):
     this.courseCodeTextFieldController =  FormTextFieldMustHave( controller: TextEditingController( text: defaultCourseCode ) ),
     this.sectionTextFieldController  = FormTextFieldMustHave( controller: TextEditingController( text: defaultSection.toString() ) ) ,
-    this.facultyTextFieldController =  FormTextFieldMustHave(controller: TextEditingController( text: defaultFaculty )),
-    this.day1StartTime =  FormTextFieldMustHave(controller: TextEditingController( text: defaultFaculty= "" ))
+    this.facultyTextFieldController =  FormTextFieldMustHave(controller: TextEditingController( text: defaultFaculty ))
   {
     initiateValidators();
   }
   // initializing all the validators from here, so that we won't have to search for them in the widget tree below.
   void initiateValidators(){
     this.courseCodeTextFieldController.validator = (value){
-      String courseCode = value.toString();
+      String courseCode = value.toString().trim();
       if( courseCode.length == 0 ){
         return "Enter course code.";
       }else if(courseCode.length > 10){
@@ -45,21 +43,23 @@ class _CreateAdvisingCourseFormControllers{
     };
 
     this.sectionTextFieldController.validator = (value){
+      String section = value.toString().trim();
+      if(section == null || section.isEmpty){
+        return "Can't be empty";
+      }else if(int.tryParse(value) == null){
+        return "Must be a number";
+      }
       return null;
     };
 
     this.facultyTextFieldController.validator = (value){
-      String facultyInitials = value.toString();
+      String facultyInitials = value.toString().trim();
       if(facultyInitials.length > 10){
         return "Faculty initials should be between 0-10";
       }
       return null;
     };
   }
-
-
-
-
     void dispose(){
       this.courseCodeTextFieldController.dispose();
       this.sectionTextFieldController.dispose();
@@ -69,17 +69,17 @@ class _CreateAdvisingCourseFormControllers{
 
 class _CreateAdvisingCourseState extends State<CreateAdvisingCourse> {
   late GlobalKey<FormState> _formKey;
+  late AdvisingCourse advisingCourse;
   late _CreateAdvisingCourseFormControllers controllers;
   late Map<String, bool> dayOfTheWeekCheckBoxMap;
   late bool bothDayTimeSame;
-  late AdvisingCourse advisingCourse;
 
   _CreateAdvisingCourseState(){
     this._formKey = GlobalKey<FormState>();
-    this.controllers = _CreateAdvisingCourseFormControllers();
+    this.advisingCourse = AdvisingCourse();
+    this.controllers = _CreateAdvisingCourseFormControllers( defaultCourseCode: advisingCourse.code, defaultFaculty: advisingCourse.faculty, defaultSection: advisingCourse.section );
     this.dayOfTheWeekCheckBoxMap = Map<String,bool>();
     this.bothDayTimeSame = true;
-    this.advisingCourse = AdvisingCourse();
 
     DayOfTheWeek.values.forEach((e){
       if(e != DayOfTheWeek.NULLDAY){
@@ -119,6 +119,7 @@ class _CreateAdvisingCourseState extends State<CreateAdvisingCourse> {
 
 
   // TODO: try to generalize this function so that we can generate list from the enum directly, and remove some enums if we want.
+  // TODO: try to make these outlinedButton UI more like a enable/disable button.
   // generating checkboxes for the day selector.
   List<Widget> generateWeekDayPicker(){
     List<Widget> weekDaysWidget = List<Widget>.empty(growable: true);
@@ -205,6 +206,7 @@ class _CreateAdvisingCourseState extends State<CreateAdvisingCourse> {
               textEditingController: this.controllers.sectionTextFieldController .controller,
               validator: this.controllers.sectionTextFieldController.validator,
               hintText:   T(context)!.createAdvisingCourseSectionHint,
+              keyboardType: TextInputType.number,
             ),
             GenericTextField(
               textEditingController: this.controllers.facultyTextFieldController.controller,
@@ -262,7 +264,7 @@ class _CreateAdvisingCourseState extends State<CreateAdvisingCourse> {
                       if(finalTime[1] == true){
                         advisingCourse.weekDay2.startTime = finalTime[0];
                         if(bothDayTimeSame){
-                          advisingCourse.weekDay2.startTime = finalTime[0];
+                          advisingCourse.weekDay1.startTime = finalTime[0];
                         }
                         setState(() {});
                       }
@@ -276,7 +278,7 @@ class _CreateAdvisingCourseState extends State<CreateAdvisingCourse> {
                       if(finalTime[1] == true){
                         advisingCourse.weekDay2.endTime = finalTime[0];
                         if(bothDayTimeSame){
-                          advisingCourse.weekDay2.endTime = finalTime[0];
+                          advisingCourse.weekDay1.endTime = finalTime[0];
                         }
                         setState(() {});
                       }
@@ -301,6 +303,15 @@ class _CreateAdvisingCourseState extends State<CreateAdvisingCourse> {
         child: Icon(Icons.save),
         onPressed: (){
           if (_formKey.currentState!.validate()) {
+            // we are not checking anything here, because we've already checked them in the validator.
+            String courseCode = controllers.courseCodeTextFieldController.controller.text.trim();
+            String faculty = controllers.facultyTextFieldController.controller.text.trim();
+            int section = int.parse(controllers.sectionTextFieldController.controller.text.trim()) ;
+            advisingCourse.code = courseCode;
+            advisingCourse.faculty = faculty;
+            advisingCourse.section = section;
+
+            // TODO: now save it in either database or in shared_pref
 
           }
         },

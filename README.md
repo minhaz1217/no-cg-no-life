@@ -6,9 +6,9 @@
 
 As of now, we hope to add these features in our flutter app:
 
-1. Organized web urls to redirect the users to proper locations for the updated information about the topics.
-2. A clubs sections to highlight different clubs, their groups, pages etc. (URL redirection)
-3. CGPA Calculator
+1. ~~Organized web urls to redirect the users to proper locations for the updated information about the topics.~~
+2. ~~A clubs sections to highlight different clubs, their groups, pages etc. (URL redirection)~~
+3. ~~CGPA Calculator~~
 4. Advising planner to generate non conflicting class schedules for students.
 5. Ability to add day to day class schedules.
 6. Light/Dark mode for viewing comfort.

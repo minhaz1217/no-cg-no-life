@@ -7,9 +7,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:no_cg_no_life_app/enums/DayOfTheWeek.dart';
 import 'package:no_cg_no_life_app/helpers/localization_helper.dart';
-import 'package:no_cg_no_life_app/models/AdvisingCourse.dart';
+import '../../../models/domain_models/Course.dart';
 import 'package:no_cg_no_life_app/models/FormTextFieldMustHave.dart';
 import 'package:no_cg_no_life_app/screens/sharedComponents/generic_text_field/generic_text_field.dart';
+import 'package:no_cg_no_life_app/services/database_service.dart';
 
 // CreateAdvisingCourse Creates or Updates ( sent model isn't null ) an advising course
 
@@ -69,14 +70,14 @@ class _CreateAdvisingCourseFormControllers{
 
 class _CreateAdvisingCourseState extends State<CreateAdvisingCourse> {
   late GlobalKey<FormState> _formKey;
-  late AdvisingCourse advisingCourse;
+  late Course advisingCourse;
   late _CreateAdvisingCourseFormControllers controllers;
   late Map<String, bool> dayOfTheWeekCheckBoxMap;
   late bool bothDayTimeSame;
 
   _CreateAdvisingCourseState(){
     this._formKey = GlobalKey<FormState>();
-    this.advisingCourse = AdvisingCourse();
+    this.advisingCourse = Course();
     this.controllers = _CreateAdvisingCourseFormControllers( defaultCourseCode: advisingCourse.code, defaultFaculty: advisingCourse.faculty, defaultSection: advisingCourse.section );
     this.dayOfTheWeekCheckBoxMap = Map<String,bool>();
     this.bothDayTimeSame = true;
@@ -310,7 +311,6 @@ class _CreateAdvisingCourseState extends State<CreateAdvisingCourse> {
             advisingCourse.code = courseCode;
             advisingCourse.faculty = faculty;
             advisingCourse.section = section;
-
             // TODO: now save it in either database or in shared_pref
 
           }

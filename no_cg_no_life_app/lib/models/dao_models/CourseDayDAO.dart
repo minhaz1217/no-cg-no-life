@@ -42,8 +42,7 @@ class CourseDAO implements DAO<Course>{
           " $_columnWeekDay2EndTime TEXT"
           " $_columnCreatedAt TEXT"
           " $_columnUpdatedAt TEXT"
-
-          ")";
+          ");";
 
   @override
   Course fromMap(Map<String, dynamic> query) {
@@ -65,23 +64,38 @@ class CourseDAO implements DAO<Course>{
     course.id  = query[_columnId];
     course.createdAt  = query[_columnCreatedAt];
     course.updatedAt  = query[_columnUpdatedAt];
-
-
     return course;
   }
 
   @override
-  Map<String, dynamic> toMap(Course object) {
+  Map<String, dynamic> toMap(Course model) {
     return <String, dynamic>{
+      _columnId: model.id,
+      _columnName: model.name,
+      _columnCode: model.code,
+      _columnSection : model.section,
+      _columnFaculty : model.faculty,
+      _columnCourseType : model.courseType,
+
+      _columnWeekDay1 : model.weekDay1.weekDay,
+      _columnWeekDay1StartTime: model.weekDay1.startTime,
+      _columnWeekDay1EndTime : model.weekDay1.endTime,
+
+      _columnWeekDay2 : model.weekDay2.weekDay,
+      _columnWeekDay2StartTime : model.weekDay2.startTime,
+      _columnWeekDay2EndTime : model.weekDay2.endTime,
+
+      _columnCreatedAt : model.createdAt,
+      _columnUpdatedAt : model.updatedAt,
     };
   }
 
   @override
   List<Course> fromList(List<Map<String,dynamic>> query) {
     List<Course> notes = List<Course>.empty(growable: true);
-    // for (Map map in query) {
-    //   notes.add(fromMap(map));
-    // }
+    for (var map in query) {
+      notes.add(fromMap(map));
+    }
     return notes;
   }
 

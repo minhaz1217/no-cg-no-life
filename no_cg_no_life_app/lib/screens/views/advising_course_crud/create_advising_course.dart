@@ -1,16 +1,12 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:no_cg_no_life_app/enums/DayOfTheWeek.dart';
 import 'package:no_cg_no_life_app/helpers/localization_helper.dart';
 import '../../../models/domain_models/Course.dart';
 import 'package:no_cg_no_life_app/models/FormTextFieldMustHave.dart';
 import 'package:no_cg_no_life_app/screens/sharedComponents/generic_text_field/generic_text_field.dart';
-import 'package:no_cg_no_life_app/services/database_service.dart';
 
 // CreateAdvisingCourse Creates or Updates ( sent model isn't null ) an advising course
 
@@ -45,7 +41,7 @@ class _CreateAdvisingCourseFormControllers{
 
     this.sectionTextFieldController.validator = (value){
       String section = value.toString().trim();
-      if(section == null || section.isEmpty){
+      if(section.isEmpty){
         return "Can't be empty";
       }else if(int.tryParse(value) == null){
         return "Must be a number";
@@ -302,7 +298,7 @@ class _CreateAdvisingCourseState extends State<CreateAdvisingCourse> {
 
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.save),
-        onPressed: (){
+        onPressed: () async {
           if (_formKey.currentState!.validate()) {
             // we are not checking anything here, because we've already checked them in the validator.
             String courseCode = controllers.courseCodeTextFieldController.controller.text.trim();
@@ -311,8 +307,6 @@ class _CreateAdvisingCourseState extends State<CreateAdvisingCourse> {
             advisingCourse.code = courseCode;
             advisingCourse.faculty = faculty;
             advisingCourse.section = section;
-            // TODO: now save it in either database or in shared_pref
-
           }
         },
       ),

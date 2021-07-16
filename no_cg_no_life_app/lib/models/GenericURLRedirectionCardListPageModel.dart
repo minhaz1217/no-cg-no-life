@@ -8,7 +8,7 @@ class GenericURLRedirectionCardListPageModel {
   GenericURLRedirectionCardListPageModel(
       {required this.pageTitle,
       required this.pageIcon,
-      required this.children}) {}
+      required this.children});
 }
 
 

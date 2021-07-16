@@ -7,5 +7,5 @@ class CourseDay extends BaseDomainModel {
   DayOfTheWeek weekDay;
   CourseDay({ DateTime? startTime, DateTime? endTime, this.weekDay = DayOfTheWeek.Friday } )
       : this.startTime= startTime ?? DateTime.now(),
-        this.endTime = endTime ?? DateTime.now()  {}
+        this.endTime = endTime ?? DateTime.now();
 }

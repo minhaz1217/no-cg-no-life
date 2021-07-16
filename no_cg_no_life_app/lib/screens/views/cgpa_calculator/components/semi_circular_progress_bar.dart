@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
@@ -24,7 +22,7 @@ class SemiCircularProgressBar extends StatefulWidget {
     this.bottomText = "Progress",
     this.progressDoneColor = Colors.blue,
     this.progressRemainingColor = Colors.blueGrey
-  } ){}
+  } );
 
   @override
   _SemiCircularProgressBarState createState() =>

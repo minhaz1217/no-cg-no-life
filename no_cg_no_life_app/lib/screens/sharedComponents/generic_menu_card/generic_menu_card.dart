@@ -3,9 +3,9 @@ import 'package:no_cg_no_life_app/helpers/dynamic_size_config.dart';
 import '../../../configs/ui_constants.dart';
 
 class GenericMenuCard extends StatelessWidget {
-  String title;
-  String imagePath;
-  Function onPressed;
+  final String title;
+  final String imagePath;
+  final Function onPressed;
   GenericMenuCard({required this.title, required this.imagePath, required this.onPressed});
   @override
   Widget build(BuildContext context) {

@@ -32,10 +32,10 @@ class Course extends BaseDomainModel{
         weekDay2 = CourseDay( weekDay: weekDay2 ?? DayOfTheWeek.Friday , startTime: day2StartTime, endTime:  day2EndTime ),
         this.code = courseCode ?? "N/A",
         this._faculty = faculty??"TBA",
-        this.name = courseName == null ? courseName! : (courseCode??""), // for now our course code and name will be same.
+        this.name = courseName != null ? courseName : (courseCode??""), // for now our course code and name will be same.
         this.section= section??0,
         this.courseType = courseType?? CourseType.AdvisingCourse
-  {}
+  ;
 // TODO: maybe later try to implement constant data, that will give course name automatically given the course code
 
   String get faculty => _faculty;

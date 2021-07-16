@@ -1,17 +1,17 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:no_cg_no_life_app/configs/ui_constants.dart';
 import 'package:no_cg_no_life_app/enums/RedirectionTypeEnum.dart';
 import 'package:no_cg_no_life_app/helpers/dynamic_size_config.dart';
 import 'package:no_cg_no_life_app/models/RedirectionCardModel.dart';
-import '../../../configs/ui_constants.dart';
-import 'package:no_cg_no_life_app/models/GenericURLRedirectionCardListPageModel.dart';
 import 'package:no_cg_no_life_app/screens/sharedComponents/generic_menu_card/generic_menu_card.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class GenericURLRedirectionCardListPage extends StatefulWidget {
   final RedirectionCardModel _model;
-  GenericURLRedirectionCardListPage(this._model){}
+  GenericURLRedirectionCardListPage(this._model)
+  ;
   @override
   _GenericURLRedirectionCardListPageState createState() => _GenericURLRedirectionCardListPageState();
 }

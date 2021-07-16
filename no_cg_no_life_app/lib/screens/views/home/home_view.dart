@@ -1,14 +1,8 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:no_cg_no_life_app/configs/basic_menu_static_data.dart';
-import 'package:no_cg_no_life_app/configs/image_path_configs.dart';
 import 'package:no_cg_no_life_app/helpers/dynamic_size_config.dart';
+import 'package:no_cg_no_life_app/repository/sqlite_database_repository_impl.dart';
 import 'package:no_cg_no_life_app/screens/sharedComponents/generic_menu_card/generic_menu_card.dart';
-import 'package:no_cg_no_life_app/services/database_service.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class HomeView extends StatefulWidget {
   @override
@@ -39,7 +33,10 @@ class _HomeViewState extends State<HomeView> {
 
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            var db = await DBService.instance();
+            var s1 = SqliteDatabaseRepositoryImpl();
+            var s2 = SqliteDatabaseRepositoryImpl();
+            print(identical(s1, s2));  // true
+            print(s1 == s2);
           },
         ),
       );

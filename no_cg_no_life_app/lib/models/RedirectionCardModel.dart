@@ -15,7 +15,7 @@ class RedirectionCardModel extends CardModel {
   // Simple constructor
   RedirectionCardModel(
       {required String title, required String imagePath, required this.redirectionType, this.children, this.url = ""})
-      : super(title: title, imagePath: imagePath) {}
+      : super(title: title, imagePath: imagePath);
 
   // Constant constructor.
   const RedirectionCardModel.constant({required String title, required String imagePath, required this.redirectionType, this.children, this.url = ""})

@@ -1,8 +1,6 @@
 
 import 'package:no_cg_no_life_app/models/dao_models/DAO.dart';
 import 'package:no_cg_no_life_app/models/domain_models/Course.dart';
-import '../CourseDay.dart';
-import 'package:no_cg_no_life_app/models/domain_models/BaseDomainModel.dart';
 
 class CourseDAO implements DAO<Course>{
 
@@ -98,5 +96,8 @@ class CourseDAO implements DAO<Course>{
     }
     return notes;
   }
-
+  @override
+  String getTableName(){
+    return this._tableName;
+  }
 }

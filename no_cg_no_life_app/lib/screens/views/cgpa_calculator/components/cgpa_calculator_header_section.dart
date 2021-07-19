@@ -1,27 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:no_cg_no_life_app/helpers/colors_utils.dart';
 import 'package:no_cg_no_life_app/helpers/dynamic_size_config.dart';
 import 'package:no_cg_no_life_app/models/CGPACalculatorHeaderNotifierModel.dart';
 import 'package:no_cg_no_life_app/screens/views/cgpa_calculator/components/semi_circular_progress_bar.dart';
-import 'package:scoped_model/scoped_model.dart';
 
 // CGPACalculatorHeaderSection is the header section of CGPA Calculator.
 
 class CGPACalculatorHeaderSection extends StatefulWidget {
-  final double finalCGPA;
-  final double finalCredit;
-  CGPACalculatorHeaderSection({ required this.finalCGPA, required this.finalCredit});
+  CGPACalculatorHeaderSection();
   @override
   _CGPACalculatorHeaderSectionState createState() =>
       _CGPACalculatorHeaderSectionState();
 }
 
-class _CGPACalculatorHeaderSectionState
-    extends State<CGPACalculatorHeaderSection> {
+class _CGPACalculatorHeaderSectionState extends State<CGPACalculatorHeaderSection> {
+  CGPACalculatorHeaderNotifierModel notifierModel = Get.find();
+
   @override
   Widget build(BuildContext context) {
-    double finalCredit = ScopedModel.of<CGPACalculatorHeaderNotifierModel>(context, rebuildOnChange: true).finalCredit;
-    double finalCGPA = ScopedModel.of<CGPACalculatorHeaderNotifierModel>(context, rebuildOnChange: true).finalCGPA;
+    double finalCredit = notifierModel.finalCredit.value;
+    double finalCGPA =  notifierModel.finalCGPA.value;
     return Container(
         width: double.infinity,
         height: DynamicSizeConfig.screenHeight * .3,

@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
       //   URLRedirectionCardModel( title: "Title 5", url: "http://www.google.com", imagePath: "assets/icons/cgpa.png" ),
       //   URLRedirectionCardModel( title: "Title 6", url: "http://www.google.com", imagePath: "assets/icons/cgpa.png" ),
       //   // URLRedirectionCardModel( title: "Title 6", url: "http://www.google.com", cardIcon: Icons.add ),
-      // ]) ),
+      // ]) ),S
     );
   }
 }

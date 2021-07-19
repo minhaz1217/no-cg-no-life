@@ -91,6 +91,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  get:
+    dependency: "direct main"
+    description:
+      name: get
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "4.1.4"
   intl:
     dependency: "direct main"
     description:
@@ -140,13 +147,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.0"
-  scoped_model:
-    dependency: "direct main"
-    description:
-      name: scoped_model
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "2.0.0-nullsafety.0"
   sky_engine:
     dependency: transitive
     description: flutter

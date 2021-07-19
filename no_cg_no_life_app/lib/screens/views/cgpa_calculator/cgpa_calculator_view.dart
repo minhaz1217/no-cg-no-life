@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:get/get.dart';
 import 'package:no_cg_no_life_app/configs/static_datas.dart';
 import 'package:no_cg_no_life_app/helpers/cgpa_helper.dart';
 import 'package:no_cg_no_life_app/helpers/colors_utils.dart';
@@ -7,7 +8,6 @@ import 'package:no_cg_no_life_app/models/CGPACalculatorHeaderNotifierModel.dart'
 import 'package:no_cg_no_life_app/models/CGPACalculatorModel.dart';
 import 'package:no_cg_no_life_app/screens/sharedComponents/generic_text_field/generic_text_field.dart';
 import 'package:no_cg_no_life_app/screens/views/cgpa_calculator/components/cgpa_calculator_header_section.dart';
-import 'package:scoped_model/scoped_model.dart';
 
 // CGPACalculatorView is the view page for CGPA Calculator.
 
@@ -66,9 +66,11 @@ class _CGPACalculatorViewState extends State<CGPACalculatorView> {
       }
     }
 
+
     // initializing the header notifier model
-    this._cgpaCalculatorHeaderNotifierModel.finalCredit = this.model.finalCredits;
-    this._cgpaCalculatorHeaderNotifierModel.finalCGPA = this.model.finalCGPA;
+    this._cgpaCalculatorHeaderNotifierModel.finalCredit.value = this.model.finalCredits;
+    this._cgpaCalculatorHeaderNotifierModel.finalCGPA.value = this.model.finalCGPA;
+    Get.put(this._cgpaCalculatorHeaderNotifierModel);
   }
 
   @override
@@ -110,9 +112,10 @@ class _CGPACalculatorViewState extends State<CGPACalculatorView> {
       finalCGPA = finalCGPA/_finalCredits.roundToDouble();
       finalCGPA = double.parse(finalCGPA.toStringAsFixed(2));
 
-      this._cgpaCalculatorHeaderNotifierModel.finalCGPA = finalCGPA;
-      this._cgpaCalculatorHeaderNotifierModel.finalCredit = _finalCredits;
-      this._cgpaCalculatorHeaderNotifierModel.notifyListeners();
+      this._cgpaCalculatorHeaderNotifierModel.finalCGPA.value = finalCGPA;
+      this._cgpaCalculatorHeaderNotifierModel.finalCredit.value = _finalCredits;
+
+      // this._cgpaCalculatorHeaderNotifierModel.notifyListeners();
       setState(() {
 
       });
@@ -296,15 +299,7 @@ class _CGPACalculatorViewState extends State<CGPACalculatorView> {
         key: _formKey,
         child: ListView(
           children: [
-            // this will make the _cgpaCalculatorHeaderNotifierModel available to the children under it if they request it.
-            ScopedModel<CGPACalculatorHeaderNotifierModel>(
-                model: this._cgpaCalculatorHeaderNotifierModel,
-                child: new ScopedModelDescendant<CGPACalculatorHeaderNotifierModel>(
-                  builder: (context, child, model){
-                      return CGPACalculatorHeaderSection( finalCredit: model.finalCredit, finalCGPA: model.finalCGPA,);
-                    },
-                )
-            ),
+            CGPACalculatorHeaderSection(),
             generateTextFieldsForHistory(),
             ...generateDataInputingRows()
           ],

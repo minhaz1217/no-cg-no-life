@@ -42,7 +42,7 @@ class SqliteDatabaseRepositoryImpl implements DatabaseRepository{
       }
 
       _onUpgrade(Database db, int oldVersion, int newVersion) async {
-        print("UPDATED");
+        print("db update");
       }
       _onOpen(Database db) async {
         // print('db version ${await db.getVersion()}');
@@ -59,7 +59,7 @@ class SqliteDatabaseRepositoryImpl implements DatabaseRepository{
       this._database = db;
 
     } catch (e) {
-      print("DB ERROR: $e");
+      print("db error: $e");
     }
     return this;
   }

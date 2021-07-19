@@ -1,4 +1,5 @@
 
+import 'package:no_cg_no_life_app/enums/DayOfTheWeek.dart';
 import 'package:no_cg_no_life_app/models/dao_models/DAO.dart';
 import 'package:no_cg_no_life_app/models/domain_models/Course.dart';
 
@@ -28,17 +29,17 @@ class CourseDAO implements DAO<Course>{
       "CREATE TABLE $_tableName("
           "$_columnId TEXT PRIMARY KEY,"
           " $_columnName TEXT,"
-          " $_columnCode TEXT"
-          " $_columnSection TEXT"
-          " $_columnFaculty TEXT"
-          " $_columnCourseType TEXT"
-          " $_columnWeekDay1 TEXT"
-          " $_columnWeekDay1StartTime TEXT"
-          " $_columnWeekDay1EndTime TEXT"
-          " $_columnWeekDay2 TEXT"
-          " $_columnWeekDay2StartTime TEXT"
-          " $_columnWeekDay2EndTime TEXT"
-          " $_columnCreatedAt TEXT"
+          " $_columnCode TEXT,"
+          " $_columnSection TEXT,"
+          " $_columnFaculty TEXT,"
+          " $_columnCourseType TEXT,"
+          " $_columnWeekDay1 TEXT,"
+          " $_columnWeekDay1StartTime TEXT,"
+          " $_columnWeekDay1EndTime TEXT,"
+          " $_columnWeekDay2 TEXT,"
+          " $_columnWeekDay2StartTime TEXT,"
+          " $_columnWeekDay2EndTime TEXT,"
+          " $_columnCreatedAt TEXT,"
           " $_columnUpdatedAt TEXT"
           ");";
 
@@ -67,25 +68,26 @@ class CourseDAO implements DAO<Course>{
 
   @override
   Map<String, dynamic> toMap(Course model) {
-    return <String, dynamic>{
-      _columnId: model.id,
-      _columnName: model.name,
-      _columnCode: model.code,
-      _columnSection : model.section,
-      _columnFaculty : model.faculty,
-      _columnCourseType : model.courseType,
+    var mp = <String, dynamic>{
+    _columnId: model.id,
+    _columnName: model.name,
+    _columnCode: model.code,
+    _columnSection : model.section,
+    _columnFaculty : model.faculty,
+    _columnCourseType : model.courseType.index,
 
-      _columnWeekDay1 : model.weekDay1.weekDay,
-      _columnWeekDay1StartTime: model.weekDay1.startTime,
-      _columnWeekDay1EndTime : model.weekDay1.endTime,
+    _columnWeekDay1 : DayOfTheWeekToString(model.weekDay1.weekDay) ,
+    _columnWeekDay1StartTime: model.weekDay1.startTime.toString(),
+    _columnWeekDay1EndTime : model.weekDay1.endTime.toString(),
 
-      _columnWeekDay2 : model.weekDay2.weekDay,
-      _columnWeekDay2StartTime : model.weekDay2.startTime,
-      _columnWeekDay2EndTime : model.weekDay2.endTime,
+    _columnWeekDay2 : DayOfTheWeekToString(model.weekDay2.weekDay),
+    _columnWeekDay2StartTime : model.weekDay2.startTime.toString(),
+    _columnWeekDay2EndTime : model.weekDay2.endTime.toString(),
 
-      _columnCreatedAt : model.createdAt,
-      _columnUpdatedAt : model.updatedAt,
+    _columnCreatedAt : model.createdAt.toString(),
+    _columnUpdatedAt : model.updatedAt.toString(),
     };
+    return mp;
   }
 
   @override

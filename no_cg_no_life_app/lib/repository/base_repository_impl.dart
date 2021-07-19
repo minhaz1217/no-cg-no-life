@@ -3,6 +3,7 @@ import 'package:no_cg_no_life_app/models/dao_models/DAO.dart';
 import 'package:no_cg_no_life_app/models/domain_models/BaseDomainModel.dart';
 import 'package:no_cg_no_life_app/repository/base_repository.dart';
 import 'package:no_cg_no_life_app/repository/database_repository.dart';
+import 'package:uuid/uuid.dart';
 
 class BaseRepositoryImpl< T extends BaseDomainModel> implements BaseRepository<T>{
   final DatabaseRepository databaseRepository;
@@ -19,7 +20,7 @@ class BaseRepositoryImpl< T extends BaseDomainModel> implements BaseRepository<T
       var result = await this.databaseRepository.getDB().query(dao.getTableName(), where: "id = ? ", whereArgs: <String>[ id.trim() ] );
       return dao.fromList(result).first;
     }else{
-      print("getByID: DB NOT OPEN");
+      print("getByID: db not open");
     }
     return null;
   }
@@ -30,7 +31,7 @@ class BaseRepositoryImpl< T extends BaseDomainModel> implements BaseRepository<T
       var result = this.databaseRepository.getDB().insert( dao.getTableName() , dao.toMap(model));
       return result;
     }else{
-      print("create: DB NOT OPEN");
+      print("create: db not open");
     }
     return 0;
   }
@@ -42,7 +43,7 @@ class BaseRepositoryImpl< T extends BaseDomainModel> implements BaseRepository<T
       var result = await this.databaseRepository.getDB().delete( dao.getTableName(), where: "id = ? ", whereArgs: <String>[ model.id.trim() ] );
       return result;
     }else{
-      print("delete: DB NOT OPEN");
+      print("delete: db not open");
     }
     return 0;
   }
@@ -71,7 +72,7 @@ class BaseRepositoryImpl< T extends BaseDomainModel> implements BaseRepository<T
           offset: offset);
       return dao.fromList(result);
     }else{
-      print("getAll: DB NOT OPEN");
+      print("getAll: db not open");
     }
 
     return List<T>.empty();
@@ -81,10 +82,10 @@ class BaseRepositoryImpl< T extends BaseDomainModel> implements BaseRepository<T
   @override
   Future<int> update(T model) async {
     if(this.databaseRepository.getDB().isOpen){
-      var result = await this.databaseRepository.getDB().update( dao.getTableName(), dao.toMap(model) );
+      var result = await this.databaseRepository.getDB().update( dao.getTableName(), dao.toMap(model), where: "id = ?", whereArgs: <String>[ model.id ] );
       return result;
     }else{
-      print("update: DB NOT OPEN");
+      print("update: db not open");
     }
     return 0;
   }

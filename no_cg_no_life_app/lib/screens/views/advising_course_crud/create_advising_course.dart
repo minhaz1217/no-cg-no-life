@@ -4,6 +4,11 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:no_cg_no_life_app/enums/DayOfTheWeek.dart';
 import 'package:no_cg_no_life_app/helpers/localization_helper.dart';
+import 'package:no_cg_no_life_app/models/dao_models/CourseDAO.dart';
+import 'package:no_cg_no_life_app/repository/base_repository.dart';
+import 'package:no_cg_no_life_app/repository/base_repository_impl.dart';
+import 'package:no_cg_no_life_app/repository/sqlite_database_repository_impl.dart';
+import 'package:sqflite/sqflite.dart';
 import '../../../models/domain_models/Course.dart';
 import 'package:no_cg_no_life_app/models/FormTextFieldMustHave.dart';
 import 'package:no_cg_no_life_app/screens/sharedComponents/generic_text_field/generic_text_field.dart';
@@ -307,6 +312,24 @@ class _CreateAdvisingCourseState extends State<CreateAdvisingCourse> {
             advisingCourse.code = courseCode;
             advisingCourse.faculty = faculty;
             advisingCourse.section = section;
+
+            // TODO: use dependency resolve.
+            BaseRepository courseRepository = BaseRepositoryImpl<Course>(SqliteDatabaseRepositoryImpl(), CourseDAO() );
+
+            // here at first we try to create, if that fails because of unique id constraint, then we try to update.
+            try{
+              var output = await courseRepository.create(advisingCourse);
+            }catch(ex){
+              if(ex is DatabaseException && ex.isUniqueConstraintError()){
+                try{
+                  var output = await courseRepository.update(advisingCourse);
+                }catch(ex){
+                  print(ex);
+                }
+              }else{
+                print(ex);
+              }
+            }
           }
         },
       ),

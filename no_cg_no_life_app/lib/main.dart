@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:no_cg_no_life_app/dependency/register_dependencies.dart';
 import 'package:no_cg_no_life_app/helpers/colors_utils.dart';
 import 'package:no_cg_no_life_app/router/route_provider.dart';
 import 'package:no_cg_no_life_app/screens/views/home/home_view.dart';
 
 void main() {
   runApp(MyApp());
+
+  // TODO: there is a system to reroute this problem, research it later.
+  // we have to register the dependency after the run app, because otherwise the db.GetDBPath() can't find the path.
+  registerDependencies();
 }
 
 class MyApp extends StatelessWidget {

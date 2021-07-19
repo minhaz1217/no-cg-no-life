@@ -1,7 +1,7 @@
 import 'package:no_cg_no_life_app/enums/CourseType.dart';
 import 'package:no_cg_no_life_app/enums/DayOfTheWeek.dart';
+import 'package:no_cg_no_life_app/models/CourseDay.dart';
 import 'package:no_cg_no_life_app/models/domain_models/BaseDomainModel.dart';
-import '../CourseDay.dart';
 
 class Course extends BaseDomainModel{
 

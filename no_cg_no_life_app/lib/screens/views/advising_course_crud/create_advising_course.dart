@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:no_cg_no_life_app/enums/DayOfTheWeek.dart';
 import 'package:no_cg_no_life_app/helpers/localization_helper.dart';
@@ -314,7 +315,7 @@ class _CreateAdvisingCourseState extends State<CreateAdvisingCourse> {
             advisingCourse.section = section;
 
             // TODO: use dependency resolve.
-            BaseRepository courseRepository = BaseRepositoryImpl<Course>(SqliteDatabaseRepositoryImpl(), CourseDAO() );
+            BaseRepository<Course> courseRepository = Get.find();
 
             // here at first we try to create, if that fails because of unique id constraint, then we try to update.
             try{

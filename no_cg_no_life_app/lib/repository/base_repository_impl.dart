@@ -3,7 +3,6 @@ import 'package:no_cg_no_life_app/models/dao_models/DAO.dart';
 import 'package:no_cg_no_life_app/models/domain_models/BaseDomainModel.dart';
 import 'package:no_cg_no_life_app/repository/base_repository.dart';
 import 'package:no_cg_no_life_app/repository/database_repository.dart';
-import 'package:uuid/uuid.dart';
 
 class BaseRepositoryImpl< T extends BaseDomainModel> implements BaseRepository<T>{
   final DatabaseRepository databaseRepository;

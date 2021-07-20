@@ -23,7 +23,7 @@ class _HomeViewState extends State<HomeView> {
                 children: [
                   // TODO: translations.
                   GenericMenuCard(title: BasicMenuStaticData.QuickLinks.title, imagePath: BasicMenuStaticData.QuickLinks.imagePath, onPressed: (){Navigator.pushNamed(context, BasicMenuStaticData.QuickLinks.url);}),
-                  GenericMenuCard(title: "CGPA Calculator", imagePath: "assets/icons/cgpa.png", onPressed: (){Navigator.pushNamed(context, "/cgpa-calculator");}),
+                  GenericMenuCard(title: "CGPA Calculator", imagePath: "assets/icons/cgpa.png", onPressed: (){ Navigator.pushNamed(context, "/cgpa-calculator");}),
                   GenericMenuCard(title: "Advising Helper", imagePath: "assets/icons/cgpa.png", onPressed: (){Navigator.pushNamed(context, "/advising-helper");}),
 
                 ],

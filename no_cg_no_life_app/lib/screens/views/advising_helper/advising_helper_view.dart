@@ -14,12 +14,12 @@ class _AdvisingHelperViewState extends State<AdvisingHelperView> {
 
     return Scaffold(
       floatingActionButton: ExpandableFab(
-        distance: 112.0,
+        distance: 80.0,
         children: [
-          ActionButton(
-            onPressed: () {},
-            icon: const Icon(Icons.format_size),
-          ),
+          // ActionButton(
+          //   onPressed: () {},
+          //   icon: const Icon(Icons.format_size),
+          // ),
           ActionButton(
             onPressed: () {
               Navigator.of(context).pushNamed( "/advising-course/list" );

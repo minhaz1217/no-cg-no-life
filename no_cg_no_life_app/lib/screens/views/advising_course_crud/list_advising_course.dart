@@ -33,11 +33,14 @@ class _ShowAllAdvisingCourseState extends State<ShowAllAdvisingCourse> {
       child: ListTile(
         title: Text("${course.code.trim()} ${course.name.trim() == "" ? "" : "(${course.name.trim()})" } | Section: ${course.section}"),
         subtitle: Text( getSubtitle(course) ),
-        isThreeLine: false,
+        isThreeLine: true,
         trailing: IconButton(
           icon: Icon( Icons.edit),
           onPressed: (){
-
+            Map <String, dynamic> data={
+              "course": course,
+            };
+            Navigator.pushNamed(context, "/advising-course/update", arguments: data);
           },
         ),
       ),
@@ -58,8 +61,11 @@ class _ShowAllAdvisingCourseState extends State<ShowAllAdvisingCourse> {
           Widget child;
           if (snapshot.hasData) {
             child = ListView.builder(
-              itemCount: snapshot.data!.length,
+              itemCount: snapshot.data!.length+1,
               itemBuilder: (context,index){
+                if(index >= snapshot.data!.length){
+                  return Padding( padding: EdgeInsets.only(bottom: 50), );
+                }
                 return  singleList(snapshot.data![index]);
               },
             );
@@ -99,6 +105,12 @@ class _ShowAllAdvisingCourseState extends State<ShowAllAdvisingCourse> {
             );
           }
           return child;
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          Navigator.of(context).pushNamed( "/advising-course/create" );
         },
       ),
     );

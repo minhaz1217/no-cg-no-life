@@ -4,6 +4,8 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:no_cg_no_life_app/enums/DayOfTheWeek.dart';
+import 'package:no_cg_no_life_app/helpers/colors_utils.dart';
+import 'package:no_cg_no_life_app/helpers/common_snackbar.dart';
 import 'package:no_cg_no_life_app/helpers/localization_helper.dart';
 import 'package:no_cg_no_life_app/models/dao_models/CourseDAO.dart';
 import 'package:no_cg_no_life_app/repository/base_repository.dart';
@@ -17,6 +19,8 @@ import 'package:no_cg_no_life_app/screens/sharedComponents/generic_text_field/ge
 // CreateAdvisingCourse Creates or Updates ( sent model isn't null ) an advising course
 
 class CreateOrUpdateAdvisingCourse extends StatefulWidget {
+  final Course? course;
+  CreateOrUpdateAdvisingCourse({this.course});
   @override
   _CreateOrUpdateAdvisingCourseState createState() => _CreateOrUpdateAdvisingCourseState();
 }
@@ -76,23 +80,54 @@ class _CreateOrUpdateAdvisingCourseState extends State<CreateOrUpdateAdvisingCou
   late _CreateAdvisingCourseFormControllers controllers;
   late Map<String, bool> dayOfTheWeekCheckBoxMap;
   late bool bothDayTimeSame;
-
-  _CreateOrUpdateAdvisingCourseState(){
+  @override
+  initState(){
     this._formKey = GlobalKey<FormState>();
 
-    this.advisingCourse = Course();
-    this.advisingCourse.weekDay1.startTime = this.advisingCourse.weekDay2.startTime;
-    this.advisingCourse.weekDay1.endTime = this.advisingCourse.weekDay2.endTime;
+    // Checking if this is create or edit operation.
+    if(widget.course == null){
+      this.advisingCourse = Course();
+      this.advisingCourse.weekDay1.startTime = this.advisingCourse.weekDay2.startTime;
+      this.advisingCourse.weekDay1.endTime = this.advisingCourse.weekDay2.endTime;
+      this.advisingCourse.weekDay1.weekDay = DayOfTheWeek.Sunday;
+      this.advisingCourse.weekDay2.weekDay = DayOfTheWeek.Tuesday;
+    }else{
+      this.advisingCourse = widget.course!;
+    }
 
+    // creating controllers for the text boxes
     this.controllers = _CreateAdvisingCourseFormControllers( defaultCourseCode: advisingCourse.code, defaultFaculty: advisingCourse.faculty, defaultSection: advisingCourse.section );
-    this.dayOfTheWeekCheckBoxMap = Map<String,bool>();
     this.bothDayTimeSame = true;
 
-    DayOfTheWeek.values.forEach((e){
-      if(e != DayOfTheWeek.NULLDAY){
-        dayOfTheWeekCheckBoxMap[ DayOfTheWeekToString(e) ] = false;
+
+
+    this.dayOfTheWeekCheckBoxMap = Map<String,bool>();
+    // TODO: try to improve this using loop and maybe mod? %8?
+    // had to do it like this because of custom sorting
+    dayOfTheWeekCheckBoxMap[ DayOfTheWeekToString(DayOfTheWeek.Sunday) ] = false;
+    dayOfTheWeekCheckBoxMap[ DayOfTheWeekToString(DayOfTheWeek.Monday) ] = false;
+    dayOfTheWeekCheckBoxMap[ DayOfTheWeekToString(DayOfTheWeek.Tuesday) ] = false;
+    dayOfTheWeekCheckBoxMap[ DayOfTheWeekToString(DayOfTheWeek.Wednesday) ] = false;
+    dayOfTheWeekCheckBoxMap[ DayOfTheWeekToString(DayOfTheWeek.Thursday) ] = false;
+    dayOfTheWeekCheckBoxMap[ DayOfTheWeekToString(DayOfTheWeek.Friday) ] = false;
+    dayOfTheWeekCheckBoxMap[ DayOfTheWeekToString(DayOfTheWeek.Saturday) ] = false;
+
+    dayOfTheWeekCheckBoxMap.forEach((key, value) {
+      if(key == DayOfTheWeekToString( advisingCourse.weekDay1.weekDay ) || key == DayOfTheWeekToString( advisingCourse.weekDay2.weekDay )){
+        dayOfTheWeekCheckBoxMap[key] = true;
       }
     });
+
+    // DayOfTheWeek.values.forEach((dayOfWeek){
+    //   if(dayOfWeek != DayOfTheWeek.NULLDAY){
+    //     if(dayOfWeek == advisingCourse.weekDay1.weekDay || dayOfWeek == advisingCourse.weekDay2.weekDay){
+    //       dayOfTheWeekCheckBoxMap[ DayOfTheWeekToString(dayOfWeek) ] = true;
+    //     }else{
+    //       dayOfTheWeekCheckBoxMap[ DayOfTheWeekToString(dayOfWeek) ] = false;
+    //     }
+    //   }
+    // });
+    super.initState();
   }
 
   toggleDayOfTheWeek(String key){
@@ -120,11 +155,7 @@ class _CreateOrUpdateAdvisingCourseState extends State<CreateOrUpdateAdvisingCou
         }
       }
     });
-
-
   }
-
-
   // TODO: try to generalize this function so that we can generate list from the enum directly, and remove some enums if we want.
   // TODO: try to make these outlinedButton UI more like a enable/disable button.
   // generating checkboxes for the day selector.
@@ -154,7 +185,7 @@ class _CreateOrUpdateAdvisingCourseState extends State<CreateOrUpdateAdvisingCou
     return [
       Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Text("Select week day"),
+        child: Text("Select week day"), // TODO: translation
       ),
       Container(
         height: 50,
@@ -196,7 +227,7 @@ class _CreateOrUpdateAdvisingCourseState extends State<CreateOrUpdateAdvisingCou
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text( T(context)!.createAdvisingCourse),
+        title: Text(  widget.course == null ?  T(context)!.createAdvisingCourse : T(context)!.updateAdvisingCourse),
         elevation: 0,
       ),
       
@@ -295,7 +326,7 @@ class _CreateOrUpdateAdvisingCourseState extends State<CreateOrUpdateAdvisingCou
               ),
             ),
             CheckboxListTile(
-              title: Text("Both days' time same: "),
+              title: Text("Both days' time same: "), // TODO: translation
               value: bothDayTimeSame,
               onChanged: (val){
                 bothDayTimeSame = bothDayTimeSame== true? false : true;
@@ -318,21 +349,22 @@ class _CreateOrUpdateAdvisingCourseState extends State<CreateOrUpdateAdvisingCou
             advisingCourse.faculty = faculty;
             advisingCourse.section = section;
 
-            // TODO: use dependency resolve.
             BaseRepository<Course> courseRepository = Get.find();
 
             // here at first we try to create, if that fails because of unique id constraint, then we try to update.
             try{
               var output = await courseRepository.create(advisingCourse);
+              showSnackBar(title:  "Success",message:  "Course created successfully.", backgroundColor: SuccessColor ); // TODO: translation
             }catch(ex){
               if(ex is DatabaseException && ex.isUniqueConstraintError()){
                 try{
                   var output = await courseRepository.update(advisingCourse);
+                  showSnackBar(title:  "Success", message: "Course updated successfully." , backgroundColor: SuccessColor); // TODO: translation
                 }catch(ex){
-                  print(ex);
+                  showError(ex);
                 }
               }else{
-                print(ex);
+                showError(ex);
               }
             }
           }

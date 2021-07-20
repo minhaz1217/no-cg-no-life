@@ -23,6 +23,8 @@ class RouteProvider {
       case '/advising-helper': return PageTransition(child: AdvisingHelperView(),curve: Curves.linear,type: PageTransitionType.rightToLeft);
 
       case '/advising-course/create': return PageTransition(child: CreateOrUpdateAdvisingCourse(),curve: Curves.linear,type: PageTransitionType.rightToLeft);
+      case '/advising-course/update':
+        return PageTransition(child: CreateOrUpdateAdvisingCourse( course: (settings.arguments as Map<String,dynamic>)["course"] ),curve: Curves.linear,type: PageTransitionType.rightToLeft);
       case '/advising-course/list': return PageTransition(child: ShowAllAdvisingCourse(),curve: Curves.linear,type: PageTransitionType.rightToLeft);
 
 

@@ -1,4 +1,6 @@
 
+import 'package:flutter/foundation.dart';
+import 'package:no_cg_no_life_app/enums/CourseType.dart';
 import 'package:no_cg_no_life_app/enums/DayOfTheWeek.dart';
 import 'package:no_cg_no_life_app/models/dao_models/DAO.dart';
 import 'package:no_cg_no_life_app/models/domain_models/Course.dart';
@@ -30,7 +32,7 @@ class CourseDAO implements DAO<Course>{
           "$_columnId TEXT PRIMARY KEY,"
           " $_columnName TEXT,"
           " $_columnCode TEXT,"
-          " $_columnSection TEXT,"
+          " $_columnSection INTEGER,"
           " $_columnFaculty TEXT,"
           " $_columnCourseType TEXT,"
           " $_columnWeekDay1 TEXT,"
@@ -50,19 +52,19 @@ class CourseDAO implements DAO<Course>{
       courseCode: query[_columnCode],
       section: query[_columnSection],
       faculty: query[_columnFaculty],
-      courseType:  query[_columnCourseType],
+      courseType:  CourseType.values[ int.parse(query[_columnCourseType]) ],
 
-      weekDay1:  query[_columnWeekDay1],
-      day1StartTime:  query[_columnWeekDay1StartTime],
-      day1EndTime:  query[_columnWeekDay1EndTime],
+      weekDay1:   StringToDayOfTheWeek(query[_columnWeekDay1]) ,
+      day1StartTime:  DateTime.parse(query[_columnWeekDay1StartTime]),
+      day1EndTime:  DateTime.parse(query[_columnWeekDay1EndTime]),
 
-      weekDay2:  query[_columnWeekDay2],
-      day2StartTime:  query[_columnWeekDay2StartTime],
-      day2EndTime:  query[_columnWeekDay2EndTime],
+      weekDay2:  StringToDayOfTheWeek(query[_columnWeekDay2]),
+      day2StartTime:  DateTime.parse(query[_columnWeekDay2StartTime]),
+      day2EndTime:  DateTime.parse(query[_columnWeekDay2EndTime]),
     );
     course.id  = query[_columnId];
-    course.createdAt  = query[_columnCreatedAt];
-    course.updatedAt  = query[_columnUpdatedAt];
+    course.createdAt  = DateTime.parse(query[_columnCreatedAt]);
+    course.updatedAt  = DateTime.parse(query[_columnUpdatedAt]);
     return course;
   }
 

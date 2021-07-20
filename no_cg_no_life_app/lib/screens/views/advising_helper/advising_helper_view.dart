@@ -21,12 +21,14 @@ class _AdvisingHelperViewState extends State<AdvisingHelperView> {
             icon: const Icon(Icons.format_size),
           ),
           ActionButton(
-            onPressed: () {},
-            icon: const Icon(Icons.insert_photo),
+            onPressed: () {
+              Navigator.of(context).pushNamed( "/advising-course/list" );
+            },
+            icon: const Icon(Icons.view_list),
           ),
           ActionButton(
             onPressed: () {
-              Navigator.of(context).pushNamed( "/create-advising-course" );
+              Navigator.of(context).pushNamed( "/advising-course/create" );
             },
             icon: const Icon(Icons.add),
           ),

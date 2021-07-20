@@ -3,5 +3,6 @@
     "createAdvisingCourse" : "Create Advising Course",
     "createAdvisingCourseCourseCodeHint" : "Course Code",
     "createAdvisingCourseSectionHint" : "Section",
-    "createAdvisingCourseFacultyHint" : "Faculty Initials"
+    "createAdvisingCourseFacultyHint" : "Faculty Initials",
+    "showAllAdvisingCourse" : "Advising Courses List"
 }

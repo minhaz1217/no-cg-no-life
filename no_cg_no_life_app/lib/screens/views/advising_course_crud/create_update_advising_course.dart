@@ -16,9 +16,9 @@ import 'package:no_cg_no_life_app/screens/sharedComponents/generic_text_field/ge
 
 // CreateAdvisingCourse Creates or Updates ( sent model isn't null ) an advising course
 
-class CreateAdvisingCourse extends StatefulWidget {
+class CreateOrUpdateAdvisingCourse extends StatefulWidget {
   @override
-  _CreateAdvisingCourseState createState() => _CreateAdvisingCourseState();
+  _CreateOrUpdateAdvisingCourseState createState() => _CreateOrUpdateAdvisingCourseState();
 }
 
 class _CreateAdvisingCourseFormControllers{
@@ -70,16 +70,20 @@ class _CreateAdvisingCourseFormControllers{
     }
 }
 
-class _CreateAdvisingCourseState extends State<CreateAdvisingCourse> {
+class _CreateOrUpdateAdvisingCourseState extends State<CreateOrUpdateAdvisingCourse> {
   late GlobalKey<FormState> _formKey;
   late Course advisingCourse;
   late _CreateAdvisingCourseFormControllers controllers;
   late Map<String, bool> dayOfTheWeekCheckBoxMap;
   late bool bothDayTimeSame;
 
-  _CreateAdvisingCourseState(){
+  _CreateOrUpdateAdvisingCourseState(){
     this._formKey = GlobalKey<FormState>();
+
     this.advisingCourse = Course();
+    this.advisingCourse.weekDay1.startTime = this.advisingCourse.weekDay2.startTime;
+    this.advisingCourse.weekDay1.endTime = this.advisingCourse.weekDay2.endTime;
+
     this.controllers = _CreateAdvisingCourseFormControllers( defaultCourseCode: advisingCourse.code, defaultFaculty: advisingCourse.faculty, defaultSection: advisingCourse.section );
     this.dayOfTheWeekCheckBoxMap = Map<String,bool>();
     this.bothDayTimeSame = true;

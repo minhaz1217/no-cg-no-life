@@ -51,10 +51,10 @@ class _ShowAllAdvisingCourseState extends State<ShowAllAdvisingCourse> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
+      appBar: AppBar(
         title: Text( T(context)!.showAllAdvisingCourse),
         elevation: 0,
-        ),
+      ),
       body: FutureBuilder< List<Course> >(
         future: repository.getAll( where: "course_type = ?", whereArgs: <String>[ CourseType.AdvisingCourse.index.toString() ] ), // a previously-obtained Future<String> or null
         builder: (BuildContext context, AsyncSnapshot< List<Course> > snapshot) {

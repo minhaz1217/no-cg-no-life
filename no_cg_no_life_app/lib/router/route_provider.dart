@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:no_cg_no_life_app/screens/views/advising_course_crud/create_update_advising_course.dart';
 import 'package:no_cg_no_life_app/screens/views/advising_course_crud/list_advising_course.dart';
+import 'package:no_cg_no_life_app/screens/views/advising_helper/advising_helper_help_view.dart';
 import 'package:no_cg_no_life_app/screens/views/advising_helper/advising_helper_view.dart';
 import 'package:no_cg_no_life_app/screens/views/cgpa_calculator/cgpa_calculator_view.dart';
 import 'package:no_cg_no_life_app/screens/views/home/home_view.dart';
@@ -21,11 +22,13 @@ class RouteProvider {
       case '/quick-links': return PageTransition(child: QuickLinks(),curve: Curves.linear,type: PageTransitionType.rightToLeft);
       case '/cgpa-calculator': return PageTransition(child: CGPACalculatorView(),curve: Curves.linear,type: PageTransitionType.rightToLeft);
       case '/advising-helper': return PageTransition(child: AdvisingHelperView(),curve: Curves.linear,type: PageTransitionType.rightToLeft);
+      case '/advising-helper/help': return PageTransition(child: AdvisingHelperHelpView(),curve: Curves.linear,type: PageTransitionType.rightToLeft);
 
       case '/advising-course/create': return PageTransition(child: CreateOrUpdateAdvisingCourse(),curve: Curves.linear,type: PageTransitionType.rightToLeft);
       case '/advising-course/update':
         return PageTransition(child: CreateOrUpdateAdvisingCourse( course: (settings.arguments as Map<String,dynamic>)["course"] ),curve: Curves.linear,type: PageTransitionType.rightToLeft);
       case '/advising-course/list': return PageTransition(child: ShowAllAdvisingCourse(),curve: Curves.linear,type: PageTransitionType.rightToLeft);
+
 
 
       default:

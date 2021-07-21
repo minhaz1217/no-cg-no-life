@@ -131,10 +131,12 @@ class _AdvisingHelperViewState extends State<AdvisingHelperView> {
       floatingActionButton: ExpandableFab(
         distance: 80.0,
         children: [
-          // ActionButton(
-          //   onPressed: () {},
-          //   icon: const Icon(Icons.format_size),
-          // ),
+          ActionButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed( "/advising-helper/help", arguments: selectedCourseCodes );
+            },
+            icon: const Icon(Icons.done),
+          ),
           ActionButton(
             onPressed: () {
               Navigator.of(context).pushNamed( "/advising-course/list" );

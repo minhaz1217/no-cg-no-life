@@ -306,34 +306,33 @@ class _CGPACalculatorViewState extends State<CGPACalculatorView> {
         ),
       ),
 
-        floatingActionButtonLocation:
-        FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              FloatingActionButton(
-                heroTag: "leftButton",
-                backgroundColor: BrandColor,
-                child: Icon(Icons.add),
-                onPressed: () {
-                  setState(() {
-                    addNewCourse();
-                  });
-                },
-              ),
-              FloatingActionButton(
-                heroTag: "rightButton",
-                backgroundColor: SuccessColor,
-                child: Icon(Icons.done),
-                onPressed: () {
-                  calculateCGPA();
-                },
-              )
-            ],
-          ),
-        )
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            FloatingActionButton(
+              heroTag: "leftButton",
+              backgroundColor: BrandColor,
+              child: Icon(Icons.add),
+              onPressed: () {
+                setState(() {
+                  addNewCourse();
+                });
+              },
+            ),
+            FloatingActionButton(
+              heroTag: "rightButton",
+              backgroundColor: SuccessColor,
+              child: Icon(Icons.done),
+              onPressed: () {
+                calculateCGPA();
+              },
+            )
+          ],
+        ),
+      )
     );
   }
 

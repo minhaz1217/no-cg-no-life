@@ -37,3 +37,7 @@ showSnackBar({
 showError(ex){
   showSnackBar(title: "Error", message: "${ex.toString()}", backgroundColor: ErrorColor);
 }
+
+showSuccess(String title, String message){
+  showSnackBar(title: "$title", message: "$message", backgroundColor: SuccessColor);
+}

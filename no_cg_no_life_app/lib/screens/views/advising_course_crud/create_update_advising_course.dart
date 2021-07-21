@@ -80,9 +80,12 @@ class _CreateOrUpdateAdvisingCourseState extends State<CreateOrUpdateAdvisingCou
   late _CreateAdvisingCourseFormControllers controllers;
   late Map<String, bool> dayOfTheWeekCheckBoxMap;
   late bool bothDayTimeSame;
+  late BaseRepository<Course> courseRepository;
   @override
   initState(){
     this._formKey = GlobalKey<FormState>();
+
+    courseRepository = Get.find();
 
     // Checking if this is create or edit operation.
     if(widget.course == null){
@@ -229,6 +232,22 @@ class _CreateOrUpdateAdvisingCourseState extends State<CreateOrUpdateAdvisingCou
       appBar: AppBar(
         title: Text(  widget.course == null ?  T(context)!.createAdvisingCourse : T(context)!.updateAdvisingCourse),
         elevation: 0,
+        actions: [
+          widget.course != null ?
+          IconButton(
+            icon: Icon(Icons.delete_forever),
+            onPressed: () async {
+              try{
+                await courseRepository.delete(advisingCourse);
+                Navigator.pop(context);
+                // showSuccess("Success", "Deleted successfully.");
+              }catch(ex){
+                showError(ex);
+              }
+            },
+          ):Container()
+
+        ],
       ),
       
       body: Form(
@@ -349,7 +368,6 @@ class _CreateOrUpdateAdvisingCourseState extends State<CreateOrUpdateAdvisingCou
             advisingCourse.faculty = faculty;
             advisingCourse.section = section;
 
-            BaseRepository<Course> courseRepository = Get.find();
 
             // here at first we try to create, if that fails because of unique id constraint, then we try to update.
             try{

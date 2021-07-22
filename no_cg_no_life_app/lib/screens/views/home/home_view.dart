@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:no_cg_no_life_app/configs/basic_menu_static_data.dart';
 import 'package:no_cg_no_life_app/helpers/dynamic_size_config.dart';
 import 'package:no_cg_no_life_app/repository/sqlite_database_repository_impl.dart';
 import 'package:no_cg_no_life_app/screens/sharedComponents/generic_menu_card/generic_menu_card.dart';
+import 'package:no_cg_no_life_app/services/data_loader_service.dart';
 
 class HomeView extends StatefulWidget {
   @override
@@ -33,10 +35,11 @@ class _HomeViewState extends State<HomeView> {
 
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            var s1 = SqliteDatabaseRepositoryImpl();
-            var s2 = SqliteDatabaseRepositoryImpl();
-            print(identical(s1, s2));  // true
-            print(s1 == s2);
+            // print(DateFormat('hh:mm a').format(DateTime.now()));
+
+            DataLoaderService dataLoaderService = DataLoaderService();
+            // print(dataLoaderService.convertAdvisingTimeToAMPM("10:10"));
+            await dataLoaderService.readAdvisingCourseDataFromLocalJson("summer_2021");
           },
         ),
       );

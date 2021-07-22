@@ -99,7 +99,7 @@ class _CreateOrUpdateAdvisingCourseState extends State<CreateOrUpdateAdvisingCou
     }
 
     // creating controllers for the text boxes
-    this.controllers = _CreateAdvisingCourseFormControllers( defaultCourseCode: advisingCourse.code, defaultFaculty: advisingCourse.faculty, defaultSection: advisingCourse.section );
+    this.controllers = _CreateAdvisingCourseFormControllers( defaultCourseCode: advisingCourse.code, defaultFaculty: advisingCourse.instructor, defaultSection: advisingCourse.section );
     this.bothDayTimeSame = true;
 
 
@@ -365,7 +365,7 @@ class _CreateOrUpdateAdvisingCourseState extends State<CreateOrUpdateAdvisingCou
             String faculty = controllers.facultyTextFieldController.controller.text.trim();
             int section = int.parse(controllers.sectionTextFieldController.controller.text.trim()) ;
             advisingCourse.code = courseCode;
-            advisingCourse.faculty = faculty;
+            advisingCourse.instructor = faculty;
             advisingCourse.section = section;
 
 

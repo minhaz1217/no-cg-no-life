@@ -75,7 +75,7 @@ class CourseDAO implements DAO<Course>{
     _columnName: model.name,
     _columnCode: model.code,
     _columnSection : model.section,
-    _columnFaculty : model.faculty,
+    _columnFaculty : model.instructor,
     _columnCourseType : model.courseType.index,
 
     _columnWeekDay1 : DayOfTheWeekToString(model.weekDay1.weekDay) ,

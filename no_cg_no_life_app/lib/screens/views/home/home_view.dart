@@ -39,7 +39,7 @@ class _HomeViewState extends State<HomeView> {
 
             DataLoaderService dataLoaderService = DataLoaderService();
             // print(dataLoaderService.convertAdvisingTimeToAMPM("10:10"));
-            await dataLoaderService.readAdvisingCourseDataFromLocalJson("summer_2021");
+            await dataLoaderService.populateDBFromJsonFile("summer_2021");
           },
         ),
       );

@@ -7,12 +7,14 @@ import 'package:no_cg_no_life_app/models/domain_models/Course.dart';
 
 class CourseDAO implements DAO<Course>{
 
+  // TODO: instead of DAO try to use reflection or anotations.
   final _tableName = 'course';
   final _columnId = 'id';
   final _columnName = 'name';
   final _columnCode = 'code';
   final _columnSection = 'section';
-  final _columnFaculty = 'faculty';
+  final _columnInstructor = 'instructor';
+  final _columnRoomNumber = 'room_number';
   final _columnCourseType = 'course_type';
   final _columnWeekDay1 = 'week_day_1';
   final _columnWeekDay1StartTime = 'week_day1_start_time';
@@ -33,7 +35,8 @@ class CourseDAO implements DAO<Course>{
           " $_columnName TEXT,"
           " $_columnCode TEXT,"
           " $_columnSection INTEGER,"
-          " $_columnFaculty TEXT,"
+          " $_columnInstructor TEXT,"
+          " $_columnRoomNumber TEXT,"
           " $_columnCourseType TEXT,"
           " $_columnWeekDay1 TEXT,"
           " $_columnWeekDay1StartTime TEXT,"
@@ -51,7 +54,8 @@ class CourseDAO implements DAO<Course>{
       courseName: query[_columnName],
       courseCode: query[_columnCode],
       section: query[_columnSection],
-      faculty: query[_columnFaculty],
+      instructor: query[_columnInstructor],
+      roomNumber: query[_columnRoomNumber],
       courseType:  CourseType.values[ int.parse(query[_columnCourseType]) ],
 
       weekDay1:   StringToDayOfTheWeek(query[_columnWeekDay1]) ,
@@ -75,7 +79,8 @@ class CourseDAO implements DAO<Course>{
     _columnName: model.name,
     _columnCode: model.code,
     _columnSection : model.section,
-    _columnFaculty : model.instructor,
+    _columnInstructor : model.instructor,
+    _columnRoomNumber : model.roomNumber,
     _columnCourseType : model.courseType.index,
 
     _columnWeekDay1 : DayOfTheWeekToString(model.weekDay1.weekDay) ,

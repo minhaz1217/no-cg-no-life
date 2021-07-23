@@ -19,7 +19,7 @@ class Course extends BaseDomainModel{
     String? courseName,
     String? courseCode,
     int? section,
-    String? faculty,
+    String? instructor,
     CourseType? courseType,
     String? roomNumber,
     DayOfTheWeek? weekDay1,
@@ -32,7 +32,7 @@ class Course extends BaseDomainModel{
       : weekDay1 = CourseDay( weekDay: weekDay1 ?? DayOfTheWeek.Friday , startTime: day1StartTime, endTime:  day1EndTime ),
         weekDay2 = CourseDay( weekDay: weekDay2 ?? DayOfTheWeek.Friday , startTime: day2StartTime, endTime:  day2EndTime ),
         this._code = courseCode ?? "N/A",
-        this._instructor = faculty??"TBA",
+        this._instructor = instructor??"TBA",
         this.name = courseName != null ? courseName : (courseCode??""), // for now our course code and name will be same.
         this.section= section??0,
         this.courseType = courseType?? CourseType.AdvisingCourse,

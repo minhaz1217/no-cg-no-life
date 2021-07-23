@@ -1,13 +1,13 @@
-
 import 'dart:convert';
-
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:no_cg_no_life_app/enums/CourseType.dart';
 import 'package:no_cg_no_life_app/enums/DayOfTheWeek.dart';
 import 'package:no_cg_no_life_app/helpers/common_snackbar.dart';
-import 'package:no_cg_no_life_app/helpers/date_helper.dart';
 import 'package:no_cg_no_life_app/models/CourseDay.dart';
 import 'package:no_cg_no_life_app/models/domain_models/Course.dart';
+import 'package:no_cg_no_life_app/repository/base_repository.dart';
 
 class DataLoaderService{
   // readJsonFromFile receives a path and outputs json data.
@@ -18,22 +18,19 @@ class DataLoaderService{
   }
 
 
-  Future readAdvisingCourseDataFromLocalJson(String name) async {
+  Future< List<Course> > readAdvisingCourseDataFromLocalJson(String name) async {
+    List<Course> courses = List<Course>.empty(growable: true);
     try{
-
       var data = await this.readJsonFromFile("assets/data/$name.json");
-      List<Course> courses = List<Course>.empty(growable: true);
       for(int i=0;i< (data["$name"].length);i++){
         Course course = Course();
         var row = data["$name"][i];
         course.code = row["course"];
         course.name = course.code;
-
-        print(i);
-
         course.section = int.parse(row["section"].toString().trim());
         course.instructor = row["instructor"].toString().trim();
         course.roomNumber = row["room_no"].toString().trim();
+        course.courseType = CourseType.AdvisingCourse;
 
         if(row["weekday"].toString().trim().length >=2){
           course.weekDay1 = getWeekDay( row["weekday"][0], row["time_from"], row["time_to"] );
@@ -58,15 +55,48 @@ class DataLoaderService{
           }
         }
       }
-
-      courses.forEach((element) {
-        print(element);
-      });
+      return courses;
+      // courses.forEach((element) {
+      //   print(element);
+      // });
     }catch(ex){
       showError( "Data load error: $ex" );
+      throw ex;
     }
   }
 
+  // mapCourse1ToCourse2ExceptMeta maps fields from a course to another course except the id, createdAt and updatedAt
+  Course mapCourse1ToCourse2ExceptMeta(Course from, Course to){
+    to.name = from.name;
+    to.code = from.code;
+    to.section = from.section;
+    to.instructor = from.instructor;
+    to.courseType = from.courseType;
+    to.roomNumber = from.roomNumber;
+    to.weekDay1 = from.weekDay1;
+    to.weekDay2 = from.weekDay2;
+    return to;
+  }
+  populateDBFromJsonFile(String name) async {
+    try{
+      var courses = await readAdvisingCourseDataFromLocalJson(name);
+      BaseRepository<Course> repository = Get.find();
+      courses.forEach((course) async {
+        var insertedCourses = await repository.getAll(where: "code = ? and section = ? and course_type = ?", whereArgs: <Object>[ course.code, course.section.toString(), course.courseType.index ]);
+        if(insertedCourses.length <=0){
+          repository.create(course);
+          print("Created: $course");
+        }else{
+          course = mapCourse1ToCourse2ExceptMeta(insertedCourses.first, course);
+          repository.update(course);
+          print("Updated: $course");
+        }
+      });
+    }catch(ex){
+      showError(ex);
+      throw ex;
+    }
+  }
 
   CourseDay getWeekDay(String weekShortCode, String start, String end){
     DayOfTheWeek dayOfWeek = DayOfTheWeek.Sunday;

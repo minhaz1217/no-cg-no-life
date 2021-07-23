@@ -1,5 +1,6 @@
 import 'package:no_cg_no_life_app/enums/CourseType.dart';
 import 'package:no_cg_no_life_app/enums/DayOfTheWeek.dart';
+import 'package:no_cg_no_life_app/enums/InsertType.dart';
 import 'package:no_cg_no_life_app/models/CourseDay.dart';
 import 'package:no_cg_no_life_app/models/domain_models/BaseDomainModel.dart';
 
@@ -12,6 +13,7 @@ class Course extends BaseDomainModel{
   CourseDay weekDay1;
   CourseDay weekDay2;
   CourseType courseType;
+  CourseEntryType courseEntryType;
   String roomNumber;
 
   Course( {
@@ -21,6 +23,7 @@ class Course extends BaseDomainModel{
     int? section,
     String? instructor,
     CourseType? courseType,
+    CourseEntryType? courseEntryType,
     String? roomNumber,
     DayOfTheWeek? weekDay1,
     DateTime? day1StartTime,
@@ -36,6 +39,7 @@ class Course extends BaseDomainModel{
         this.name = courseName != null ? courseName : (courseCode??""), // for now our course code and name will be same.
         this.section= section??0,
         this.courseType = courseType?? CourseType.AdvisingCourse,
+        this.courseEntryType = courseEntryType ?? CourseEntryType.ManualEntry,
         this.roomNumber = roomNumber?? "0"
   ;
 // TODO: maybe later try to implement constant data, that will give course name automatically given the course code

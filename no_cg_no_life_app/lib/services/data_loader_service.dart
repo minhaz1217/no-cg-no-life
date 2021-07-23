@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:no_cg_no_life_app/enums/CourseType.dart';
 import 'package:no_cg_no_life_app/enums/DayOfTheWeek.dart';
+import 'package:no_cg_no_life_app/enums/InsertType.dart';
 import 'package:no_cg_no_life_app/helpers/common_snackbar.dart';
 import 'package:no_cg_no_life_app/models/CourseDay.dart';
 import 'package:no_cg_no_life_app/models/domain_models/Course.dart';
@@ -31,6 +32,7 @@ class DataLoaderService{
         course.instructor = row["instructor"].toString().trim();
         course.roomNumber = row["room_no"].toString().trim();
         course.courseType = CourseType.AdvisingCourse;
+        course.courseEntryType = CourseEntryType.AutomaticEntry;
 
         if(row["weekday"].toString().trim().length >=2){
           course.weekDay1 = getWeekDay( row["weekday"][0], row["time_from"], row["time_to"] );
@@ -78,24 +80,28 @@ class DataLoaderService{
     return to;
   }
   populateDBFromJsonFile(String name) async {
+    int insertUpdateCount = 0;
     try{
       var courses = await readAdvisingCourseDataFromLocalJson(name);
       BaseRepository<Course> repository = Get.find();
-      courses.forEach((course) async {
-        var insertedCourses = await repository.getAll(where: "code = ? and section = ? and course_type = ?", whereArgs: <Object>[ course.code, course.section.toString(), course.courseType.index ]);
+      for(int i=0;i<courses.length;i++){
+        var course = courses[i];
+        var insertedCourses = await repository.getAll(where: "code = ? and section = ? and course_type = ? and course_entry_type = ? ", whereArgs: <Object>[ course.code, course.section.toString(), course.courseType.index, CourseEntryType.AutomaticEntry.index ]);
         if(insertedCourses.length <=0){
-          repository.create(course);
+          await repository.create(course);
           print("Created: $course");
         }else{
           course = mapCourse1ToCourse2ExceptMeta(insertedCourses.first, course);
-          repository.update(course);
+          await repository.update(course);
           print("Updated: $course");
         }
-      });
+        insertUpdateCount++;
+      }
     }catch(ex){
       showError(ex);
       throw ex;
     }
+    showSuccess("Success", "$insertUpdateCount course(s) added");
   }
 
   CourseDay getWeekDay(String weekShortCode, String start, String end){

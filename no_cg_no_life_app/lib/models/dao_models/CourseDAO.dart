@@ -2,6 +2,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:no_cg_no_life_app/enums/CourseType.dart';
 import 'package:no_cg_no_life_app/enums/DayOfTheWeek.dart';
+import 'package:no_cg_no_life_app/enums/InsertType.dart';
 import 'package:no_cg_no_life_app/models/dao_models/DAO.dart';
 import 'package:no_cg_no_life_app/models/domain_models/Course.dart';
 
@@ -16,6 +17,7 @@ class CourseDAO implements DAO<Course>{
   final _columnInstructor = 'instructor';
   final _columnRoomNumber = 'room_number';
   final _columnCourseType = 'course_type';
+  final _columnCourseEntryType = 'course_entry_type';
   final _columnWeekDay1 = 'week_day_1';
   final _columnWeekDay1StartTime = 'week_day1_start_time';
   final _columnWeekDay1EndTime = 'week_day1_end_time';
@@ -38,6 +40,7 @@ class CourseDAO implements DAO<Course>{
           " $_columnInstructor TEXT,"
           " $_columnRoomNumber TEXT,"
           " $_columnCourseType TEXT,"
+          " $_columnCourseEntryType TEXT,"
           " $_columnWeekDay1 TEXT,"
           " $_columnWeekDay1StartTime TEXT,"
           " $_columnWeekDay1EndTime TEXT,"
@@ -57,6 +60,7 @@ class CourseDAO implements DAO<Course>{
       instructor: query[_columnInstructor],
       roomNumber: query[_columnRoomNumber],
       courseType:  CourseType.values[ int.parse(query[_columnCourseType]) ],
+      courseEntryType:  CourseEntryType.values[ int.parse(query[_columnCourseEntryType]) ],
 
       weekDay1:   StringToDayOfTheWeek(query[_columnWeekDay1]) ,
       day1StartTime:  DateTime.parse(query[_columnWeekDay1StartTime]),
@@ -82,6 +86,7 @@ class CourseDAO implements DAO<Course>{
     _columnInstructor : model.instructor,
     _columnRoomNumber : model.roomNumber,
     _columnCourseType : model.courseType.index,
+    _columnCourseEntryType : model.courseEntryType.index,
 
     _columnWeekDay1 : DayOfTheWeekToString(model.weekDay1.weekDay) ,
     _columnWeekDay1StartTime: model.weekDay1.startTime.toString(),

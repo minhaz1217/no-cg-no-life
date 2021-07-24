@@ -9,12 +9,9 @@ import 'package:no_cg_no_life_app/enums/InsertType.dart';
 import 'package:no_cg_no_life_app/helpers/colors_utils.dart';
 import 'package:no_cg_no_life_app/helpers/common_snackbar.dart';
 import 'package:no_cg_no_life_app/helpers/localization_helper.dart';
-import 'package:no_cg_no_life_app/models/dao_models/CourseDAO.dart';
+import 'package:no_cg_no_life_app/models/domain_models/Course.dart';
 import 'package:no_cg_no_life_app/repository/base_repository.dart';
-import 'package:no_cg_no_life_app/repository/base_repository_impl.dart';
-import 'package:no_cg_no_life_app/repository/sqlite_database_repository_impl.dart';
 import 'package:sqflite/sqflite.dart';
-import '../../../models/domain_models/Course.dart';
 import 'package:no_cg_no_life_app/models/FormTextFieldMustHave.dart';
 import 'package:no_cg_no_life_app/screens/sharedComponents/generic_text_field/generic_text_field.dart';
 

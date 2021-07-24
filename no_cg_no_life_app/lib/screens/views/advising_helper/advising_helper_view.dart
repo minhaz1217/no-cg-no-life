@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:no_cg_no_life_app/enums/InsertType.dart';
 import 'package:no_cg_no_life_app/helpers/localization_helper.dart';
 import 'package:no_cg_no_life_app/models/domain_models/Course.dart';
 import 'package:no_cg_no_life_app/repository/base_repository.dart';
@@ -14,9 +15,9 @@ class AdvisingHelperView extends StatefulWidget {
 
 class _AdvisingHelperViewState extends State<AdvisingHelperView> {
   BaseRepository<Course> repository = Get.find();
-  var _kOptions = List<String>.empty( growable: true );
+  var _kOptions = List<Course>.empty( growable: true );
   var selectedCourseCodes = List<String>.empty(growable: true);
-
+  bool _fromManualEntry = false;
   @override
   void initState() {
     super.initState();
@@ -36,35 +37,63 @@ class _AdvisingHelperViewState extends State<AdvisingHelperView> {
         builder: (BuildContext context, AsyncSnapshot< List<Course> > snapshot) {
           Widget child;
           if (snapshot.hasData) {
-            // filling the autocomplete options. and only taking unique ones
-            snapshot.data!.forEach((element) {
-              if(!_kOptions.contains( element.code.toLowerCase() )){
-                _kOptions.add(element.code.toLowerCase());
+            print(snapshot.data!.length.toString());
+            List<Course> distinctCourses = List<Course>.empty(growable: true);
+            for(int i=0;i<snapshot.data!.length;i++){
+              bool found = false;
+              for(int j=0;j<distinctCourses.length;j++){
+                if(distinctCourses[j].code == snapshot.data![i].code){
+                  found = true;
+                  break;
+                }
               }
-            });
+              if(found == false  ){
+                if(_fromManualEntry && snapshot.data![i].courseEntryType == CourseEntryType.ManualEntry){
+                  distinctCourses.add( snapshot.data![i] );
+                }else if(!_fromManualEntry && snapshot.data![i].courseEntryType == CourseEntryType.AutomaticEntry){
+                  distinctCourses.add( snapshot.data![i] );
+                }
+              }
+            }
+            
             child =
                 Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: ListView(
                     children: [
-                      Autocomplete<String>(
+                      Autocomplete<Course>(
                         optionsBuilder: (TextEditingValue textEditingValue) {
-                          if (textEditingValue.text == '') {
-                            return const Iterable<String>.empty();
-                          }
-                          return _kOptions.where((String option) {
-                            return option.contains(textEditingValue.text.toLowerCase()) && !selectedCourseCodes.contains(option);
-                          });
+                          return distinctCourses.where((Course option) {
+                            bool eval =
+                            option.code.contains(textEditingValue.text.toUpperCase()) &&
+                                !selectedCourseCodes.contains(option.code)
+                            ;
+                            return eval;
+                          }).toList();
                         },
-                        onSelected: (String selection) {
+                        displayStringForOption: (Course course){
+                          return course.code;
+                        },
+                        onSelected: (Course selection) {
                           setState(() {
                             // we only select the one that isn't already selected.
                             if(!selectedCourseCodes.contains(selection)){
-                              selectedCourseCodes.add(selection);
+                              selectedCourseCodes.add(selection.code);
                             }
                           });
                         },
                       ),
+
+                      CheckboxListTile(
+                          title: Text("Select from manual entry? : "),
+                          value: _fromManualEntry,
+                          onChanged: (val){
+                            setState(() {
+                              _fromManualEntry = !_fromManualEntry;
+                              selectedCourseCodes.clear();
+                            });
+                          }),
+
                       Wrap(
                         children: List<Widget>.generate(
                           selectedCourseCodes.length,
@@ -133,7 +162,10 @@ class _AdvisingHelperViewState extends State<AdvisingHelperView> {
         children: [
           ActionButton(
             onPressed: () {
-              Navigator.of(context).pushNamed( "/advising-helper/help", arguments: selectedCourseCodes );
+              Map <String, dynamic> data= {
+                "selectedCourses": selectedCourseCodes,
+              };
+              Navigator.of(context).pushNamed( "/advising-helper/help", arguments: data );
             },
             icon: const Icon(Icons.done),
           ),

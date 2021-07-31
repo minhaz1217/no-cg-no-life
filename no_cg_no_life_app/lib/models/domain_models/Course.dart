@@ -60,6 +60,6 @@ class Course extends BaseDomainModel{
 
   @override
   String toString(){
-      return "${this.name} (${this.code}) : ${this.section} | ${this.roomNumber} Time: ${this.weekDay1} - ${this.weekDay2}";
+      return "${this.name} (${this.code}) : ${this.section} | ${this.roomNumber} | ${this.courseType == CourseType.LabCourse ? "LAB" : "NORMAL"} | Time: ${this.weekDay1} - ${this.weekDay2}";
   }
 }

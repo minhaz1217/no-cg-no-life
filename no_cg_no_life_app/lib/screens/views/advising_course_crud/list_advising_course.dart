@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:no_cg_no_life_app/enums/CourseType.dart';
 import 'package:no_cg_no_life_app/enums/CourseUseageType.dart';
 import 'package:no_cg_no_life_app/enums/DayOfTheWeek.dart';
 import 'package:no_cg_no_life_app/enums/InsertType.dart';
@@ -25,6 +26,8 @@ class _ShowAllAdvisingCourseState extends State<ShowAllAdvisingCourse> {
     if(course.weekDay1.startTime.compareTo(course.weekDay2.startTime) == 0 && course.weekDay1.endTime.compareTo(course.weekDay2.endTime) == 0 ){
       // both start and end is same, so we can show just one.
       return "${ DayOfTheWeekToString(course.weekDay1.weekDay)} & ${DayOfTheWeekToString(course.weekDay2.weekDay)} ${getStartTimeEndTimeFromCourseDay(course.weekDay1)}";
+    }else if( course.courseType == CourseType.LabCourse ){
+      return "${ DayOfTheWeekToString(course.weekDay1.weekDay)} ${getStartTimeEndTimeFromCourseDay(course.weekDay1)}";;
     }
     return "${ DayOfTheWeekToString(course.weekDay1.weekDay)} ${getStartTimeEndTimeFromCourseDay(course.weekDay1)} & ${DayOfTheWeekToString(course.weekDay2.weekDay)} ${getStartTimeEndTimeFromCourseDay(course.weekDay2)}";
 

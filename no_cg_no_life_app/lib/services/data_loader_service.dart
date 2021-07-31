@@ -36,10 +36,15 @@ class DataLoaderService{
         course.courseUsageType = CourseUsageType.AdvisingCourse;
         course.courseEntryType = CourseEntryType.AutomaticEntry;
 
+        if(course.code.contains("LAB")){
+          course.courseType = CourseType.LabCourse;
+        }else{
+          course.courseType = CourseType.NormalCourse;
+        }
+
         if(row["weekday"].toString().trim().length >=2){
           course.weekDay1 = getWeekDay( row["weekday"][0], row["time_from"], row["time_to"] );
           course.weekDay2 = getWeekDay( row["weekday"][1], row["time_from"], row["time_to"] );
-          course.courseType = CourseType.NormalCourse;
           courses.add(course);
         }else if(row["weekday"].toString().trim().length >=1){
           // here if we have a single week day, that either means that our course is a lab course, or that we have another course day with same course code and section.
@@ -49,7 +54,6 @@ class DataLoaderService{
             if(courses[j].code == course.code && courses[j].section == course.section){
               // we got a match, so we'll put this course's weekday, start and end time, to that course's weekDay2
               courses[j].weekDay2 = getWeekDay( row["weekday"][0], row["time_from"], row["time_to"] );
-              courses[j].courseType = CourseType.NormalCourse;
               found = true;
               break;
             }
@@ -57,7 +61,6 @@ class DataLoaderService{
           // if we didn't found another course, that means, this course is either a lab course or the first instance of this course, either way we'll have to insert it in the courses list.
           if(found == false){
             course.weekDay1 = getWeekDay( row["weekday"][0], row["time_from"], row["time_to"] );
-            course.courseType = CourseType.LabCourse; // at first we insert it as lab course because it only has one weekday, if we later find it's next week day, then it will become normal course.
             courses.add(course);
           }
         }

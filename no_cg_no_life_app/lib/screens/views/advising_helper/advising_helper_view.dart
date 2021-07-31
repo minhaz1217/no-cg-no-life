@@ -37,7 +37,7 @@ class _AdvisingHelperViewState extends State<AdvisingHelperView> {
         builder: (BuildContext context, AsyncSnapshot< List<Course> > snapshot) {
           Widget child;
           if (snapshot.hasData) {
-            print(snapshot.data!.length.toString());
+            //print(snapshot.data!.length.toString());
             List<Course> distinctCourses = List<Course>.empty(growable: true);
             for(int i=0;i<snapshot.data!.length;i++){
               bool found = false;

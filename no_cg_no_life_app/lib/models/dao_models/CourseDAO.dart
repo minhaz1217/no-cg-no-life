@@ -1,6 +1,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:no_cg_no_life_app/enums/CourseType.dart';
+import 'package:no_cg_no_life_app/enums/CourseUseageType.dart';
 import 'package:no_cg_no_life_app/enums/DayOfTheWeek.dart';
 import 'package:no_cg_no_life_app/enums/InsertType.dart';
 import 'package:no_cg_no_life_app/models/dao_models/DAO.dart';
@@ -8,7 +9,7 @@ import 'package:no_cg_no_life_app/models/domain_models/Course.dart';
 
 class CourseDAO implements DAO<Course>{
 
-  // TODO: instead of DAO try to use reflection or anotations.
+  // TODO: instead of DAO try to use reflection or annotations.
   final _tableName = 'course';
   final _columnId = 'id';
   final _columnName = 'name';
@@ -17,6 +18,7 @@ class CourseDAO implements DAO<Course>{
   final _columnInstructor = 'instructor';
   final _columnRoomNumber = 'room_number';
   final _columnCourseType = 'course_type';
+  final _columnCourseUsageType = 'course_usage_type';
   final _columnCourseEntryType = 'course_entry_type';
   final _columnWeekDay1 = 'week_day_1';
   final _columnWeekDay1StartTime = 'week_day1_start_time';
@@ -40,6 +42,7 @@ class CourseDAO implements DAO<Course>{
           " $_columnInstructor TEXT,"
           " $_columnRoomNumber TEXT,"
           " $_columnCourseType TEXT,"
+          " $_columnCourseUsageType TEXT,"
           " $_columnCourseEntryType TEXT,"
           " $_columnWeekDay1 TEXT,"
           " $_columnWeekDay1StartTime TEXT,"
@@ -59,7 +62,8 @@ class CourseDAO implements DAO<Course>{
       section: query[_columnSection],
       instructor: query[_columnInstructor],
       roomNumber: query[_columnRoomNumber],
-      courseType:  CourseType.values[ int.parse(query[_columnCourseType]) ],
+      courseType :  CourseType.values[ int.parse(query[_columnCourseType]) ],
+      courseUsageType:  CourseUsageType.values[ int.parse(query[_columnCourseUsageType]) ],
       courseEntryType:  CourseEntryType.values[ int.parse(query[_columnCourseEntryType]) ],
 
       weekDay1:   StringToDayOfTheWeek(query[_columnWeekDay1]) ,
@@ -86,6 +90,7 @@ class CourseDAO implements DAO<Course>{
     _columnInstructor : model.instructor,
     _columnRoomNumber : model.roomNumber,
     _columnCourseType : model.courseType.index,
+    _columnCourseUsageType : model.courseUsageType.index,
     _columnCourseEntryType : model.courseEntryType.index,
 
     _columnWeekDay1 : DayOfTheWeekToString(model.weekDay1.weekDay) ,

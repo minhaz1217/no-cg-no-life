@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:no_cg_no_life_app/enums/CourseType.dart';
+import 'package:no_cg_no_life_app/enums/CourseUseageType.dart';
 import 'package:no_cg_no_life_app/enums/DayOfTheWeek.dart';
 import 'package:no_cg_no_life_app/enums/InsertType.dart';
 import 'package:no_cg_no_life_app/helpers/date_helper.dart';
@@ -57,7 +57,7 @@ class _ShowAllAdvisingCourseState extends State<ShowAllAdvisingCourse> {
         elevation: 0,
       ),
       body: FutureBuilder< List<Course> >(
-        future: repository.getAll( where: "course_type = ? and course_entry_type = ? ", whereArgs: <Object>[ CourseType.AdvisingCourse.index, CourseEntryType.AutomaticEntry.index ] ), // a previously-obtained Future<String> or null
+        future: repository.getAll( where: "course_usage_type = ? and course_entry_type = ? ", whereArgs: <Object>[ CourseUsageType.AdvisingCourse.index, CourseEntryType.AutomaticEntry.index ] ), // a previously-obtained Future<String> or null
         builder: (BuildContext context, AsyncSnapshot< List<Course> > snapshot) {
           Widget child;
           if (snapshot.hasData) {

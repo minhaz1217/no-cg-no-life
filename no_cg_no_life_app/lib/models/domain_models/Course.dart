@@ -1,4 +1,5 @@
 import 'package:no_cg_no_life_app/enums/CourseType.dart';
+import 'package:no_cg_no_life_app/enums/CourseUseageType.dart';
 import 'package:no_cg_no_life_app/enums/DayOfTheWeek.dart';
 import 'package:no_cg_no_life_app/enums/InsertType.dart';
 import 'package:no_cg_no_life_app/models/CourseDay.dart';
@@ -12,7 +13,8 @@ class Course extends BaseDomainModel{
   String _instructor;
   CourseDay weekDay1;
   CourseDay weekDay2;
-  CourseType courseType;
+  CourseType courseType; // used to detect either normal course or lab course
+  CourseUsageType courseUsageType;
   CourseEntryType courseEntryType;
   String roomNumber;
 
@@ -23,6 +25,7 @@ class Course extends BaseDomainModel{
     int? section,
     String? instructor,
     CourseType? courseType,
+    CourseUsageType? courseUsageType,
     CourseEntryType? courseEntryType,
     String? roomNumber,
     DayOfTheWeek? weekDay1,
@@ -38,7 +41,8 @@ class Course extends BaseDomainModel{
         this._instructor = instructor??"TBA",
         this.name = courseName != null ? courseName : (courseCode??""), // for now our course code and name will be same.
         this.section= section??0,
-        this.courseType = courseType?? CourseType.AdvisingCourse,
+        this.courseType = courseType?? CourseType.NormalCourse,
+        this.courseUsageType = courseUsageType?? CourseUsageType.AdvisingCourse,
         this.courseEntryType = courseEntryType ?? CourseEntryType.ManualEntry,
         this.roomNumber = roomNumber?? "0"
   ;

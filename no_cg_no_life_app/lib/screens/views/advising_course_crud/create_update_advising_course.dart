@@ -3,7 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:no_cg_no_life_app/enums/CourseType.dart';
+import 'package:no_cg_no_life_app/enums/CourseUseageType.dart';
 import 'package:no_cg_no_life_app/enums/DayOfTheWeek.dart';
 import 'package:no_cg_no_life_app/enums/InsertType.dart';
 import 'package:no_cg_no_life_app/helpers/colors_utils.dart';
@@ -94,7 +94,7 @@ class _CreateOrUpdateAdvisingCourseState extends State<CreateOrUpdateAdvisingCou
       this.advisingCourse.weekDay1.weekDay = DayOfTheWeek.Sunday;
       this.advisingCourse.weekDay2.weekDay = DayOfTheWeek.Tuesday;
       this.advisingCourse.courseEntryType = CourseEntryType.ManualEntry;
-      this.advisingCourse.courseType = CourseType.AdvisingCourse;
+      this.advisingCourse.courseUsageType = CourseUsageType.AdvisingCourse;
     }else{
       this.advisingCourse = widget.course!;
     }

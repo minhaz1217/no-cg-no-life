@@ -1,6 +1,5 @@
 
-// CourseType is used to indicate whether the course is of advising type or of semester type.
 enum CourseType{
-  AdvisingCourse,
-  SemesterCourse
+  NormalCourse, // 3 credits course with 2 days each week
+  LabCourse     // 1 or 2 credits course with 1 day each week
 }

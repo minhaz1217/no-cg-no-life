@@ -1,5 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:no_cg_no_life_app/enums/DayOfTheWeek.dart';
+import 'package:no_cg_no_life_app/helpers/date_helper.dart';
 import 'package:no_cg_no_life_app/models/domain_models/BaseDomainModel.dart';
 
 class CourseDay extends BaseDomainModel {
@@ -7,8 +8,8 @@ class CourseDay extends BaseDomainModel {
   DateTime endTime;
   DayOfTheWeek weekDay;
   CourseDay({ DateTime? startTime, DateTime? endTime, this.weekDay = DayOfTheWeek.Friday } )
-      : this.startTime= startTime ?? DateTime.now(),
-        this.endTime = endTime ?? DateTime.now();
+      : this.startTime= startTime ?? removeDateKeepAMPMTime(DateTime.now()),
+        this.endTime = endTime ?? removeDateKeepAMPMTime(DateTime.now());
 
   @override
   String toString(){

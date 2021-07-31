@@ -8,6 +8,7 @@ import 'package:no_cg_no_life_app/enums/DayOfTheWeek.dart';
 import 'package:no_cg_no_life_app/enums/InsertType.dart';
 import 'package:no_cg_no_life_app/helpers/colors_utils.dart';
 import 'package:no_cg_no_life_app/helpers/common_snackbar.dart';
+import 'package:no_cg_no_life_app/helpers/date_helper.dart';
 import 'package:no_cg_no_life_app/helpers/localization_helper.dart';
 import 'package:no_cg_no_life_app/models/domain_models/Course.dart';
 import 'package:no_cg_no_life_app/repository/base_repository.dart';
@@ -238,6 +239,7 @@ class _CreateOrUpdateAdvisingCourseState extends State<CreateOrUpdateAdvisingCou
           IconButton(
             icon: Icon(Icons.delete_forever),
             onPressed: () async {
+              // TODO: on delete, show a confirmation dialog then delete on confirm
               try{
                 await courseRepository.delete(advisingCourse);
                 Navigator.pop(context);
@@ -284,9 +286,9 @@ class _CreateOrUpdateAdvisingCourseState extends State<CreateOrUpdateAdvisingCou
                     onPressed: () async {
                       var finalTime = await showTimePicker(context, advisingCourse.weekDay1.startTime);
                       if(finalTime[1] == true){
-                        advisingCourse.weekDay1.startTime = finalTime[0];
+                        advisingCourse.weekDay1.startTime = removeDateKeepAMPMTime(finalTime[0]);
                         if(bothDayTimeSame){
-                          advisingCourse.weekDay2.startTime = finalTime[0];
+                          advisingCourse.weekDay2.startTime = removeDateKeepAMPMTime(finalTime[0]);
                         }
                         setState(() {});
                       }
@@ -320,9 +322,9 @@ class _CreateOrUpdateAdvisingCourseState extends State<CreateOrUpdateAdvisingCou
                     onPressed: () async {
                       var finalTime = await showTimePicker(context, advisingCourse.weekDay2.startTime);
                       if(finalTime[1] == true){
-                        advisingCourse.weekDay2.startTime = finalTime[0];
+                        advisingCourse.weekDay2.startTime = removeDateKeepAMPMTime(finalTime[0]);
                         if(bothDayTimeSame){
-                          advisingCourse.weekDay1.startTime = finalTime[0];
+                          advisingCourse.weekDay1.startTime = removeDateKeepAMPMTime(finalTime[0]);
                         }
                         setState(() {});
                       }

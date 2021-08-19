@@ -23,7 +23,7 @@ class RouteProvider {
       case '/cgpa-calculator': return PageTransition(child: CGPACalculatorView(),curve: Curves.linear,type: PageTransitionType.rightToLeft);
       case '/advising-helper': return PageTransition(child: AdvisingHelperView(),curve: Curves.linear,type: PageTransitionType.rightToLeft);
 
-      case '/advising-helper/help': return PageTransition(child: AdvisingHelperNoConflictSchedulingView( selectedCourses: (settings.arguments as Map<String,dynamic>)["selectedCourses"] ) ,curve: Curves.linear,type: PageTransitionType.rightToLeft);
+      case '/advising-helper/help': return PageTransition(child: AdvisingHelperNoConflictSchedulingView( selectedCourses: (settings.arguments as Map<String,dynamic>)["selectedCourses"], numberOfCourses: (settings.arguments as Map<String,dynamic>)["numberOfCourses"], ) ,curve: Curves.linear,type: PageTransitionType.rightToLeft);
 
       case '/advising-course/create': return PageTransition(child: CreateOrUpdateAdvisingCourse(),curve: Curves.linear,type: PageTransitionType.rightToLeft);
       case '/advising-course/update':

@@ -10,7 +10,8 @@ class GenericTextField extends StatefulWidget {
   final bool readOnly;
   final TextInputType keyboardType;
   final FormFieldValidator<String>? validator;
-  GenericTextField({ required this.textEditingController, this.hintText = "", this.readOnly = false, this.keyboardType = TextInputType.text, this.validator });
+  final EdgeInsets padding;
+  GenericTextField({ required this.textEditingController, this.hintText = "", this.readOnly = false, this.keyboardType = TextInputType.text, this.validator, this.padding = const EdgeInsets.all(8.0) });
   @override
   _GenericTextFieldState createState() => _GenericTextFieldState();
 }
@@ -19,7 +20,7 @@ class _GenericTextFieldState extends State<GenericTextField> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: widget.padding,
       child: TextFormField(
         validator: widget.validator,
         controller: widget.textEditingController,

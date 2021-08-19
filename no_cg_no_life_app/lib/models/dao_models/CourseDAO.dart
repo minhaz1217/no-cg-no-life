@@ -62,21 +62,21 @@ class CourseDAO implements DAO<Course>{
       section: query[_columnSection],
       instructor: query[_columnInstructor],
       roomNumber: query[_columnRoomNumber],
-      courseType :  CourseType.values[ int.parse(query[_columnCourseType]) ],
-      courseUsageType:  CourseUsageType.values[ int.parse(query[_columnCourseUsageType]) ],
-      courseEntryType:  CourseEntryType.values[ int.parse(query[_columnCourseEntryType]) ],
+      courseType :  CourseType.values[ int.parse(query[_columnCourseType]??"0") ],
+      courseUsageType:  CourseUsageType.values[ int.parse(query[_columnCourseUsageType]??"0") ],
+      courseEntryType:  CourseEntryType.values[ int.parse(query[_columnCourseEntryType]??"0") ],
 
-      weekDay1:   StringToDayOfTheWeek(query[_columnWeekDay1]) ,
-      day1StartTime:  DateTime.parse(query[_columnWeekDay1StartTime]),
-      day1EndTime:  DateTime.parse(query[_columnWeekDay1EndTime]),
+      weekDay1:   StringToDayOfTheWeek(query[_columnWeekDay1]?? "") ,
+      day1StartTime:  DateTime.parse(query[_columnWeekDay1StartTime]??"1970-01-01"),
+      day1EndTime:  DateTime.parse(query[_columnWeekDay1EndTime]??"1970-01-01"),
 
-      weekDay2:  StringToDayOfTheWeek(query[_columnWeekDay2]),
-      day2StartTime:  DateTime.parse(query[_columnWeekDay2StartTime]),
-      day2EndTime:  DateTime.parse(query[_columnWeekDay2EndTime]),
+      weekDay2:  StringToDayOfTheWeek(query[_columnWeekDay2]?? ""),
+      day2StartTime:  DateTime.parse(query[_columnWeekDay2StartTime]??"1970-01-01"),
+      day2EndTime:  DateTime.parse(query[_columnWeekDay2EndTime]??"1970-01-01"),
     );
-    course.id  = query[_columnId];
-    course.createdAt  = DateTime.parse(query[_columnCreatedAt]);
-    course.updatedAt  = DateTime.parse(query[_columnUpdatedAt]);
+    course.id  = query[_columnId]??"";
+    course.createdAt  = DateTime.parse(query[_columnCreatedAt]??"1970-01-01");
+    course.updatedAt  = DateTime.parse(query[_columnUpdatedAt]??"1970-01-01");
     return course;
   }
 

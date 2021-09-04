@@ -19,15 +19,12 @@ class DataLoaderService{
     return data;
   }
 
-
-  Future< List<Course> > readAdvisingCourseDataFromLocalJson(String name) async {
-
+  List<Course> makeCoursesFromJsonData(dynamic data, String rootObjectName){
     List<Course> courses = List<Course>.empty(growable: true);
     try{
-      var data = await this.readJsonFromFile("assets/data/$name.json");
-      for(int i=0;i< (data["$name"].length);i++){
+      for(int i=0;i< (data["$rootObjectName"].length);i++){
         Course course = Course();
-        var row = data["$name"][i];
+        var row = data["$rootObjectName"][i];
         course.code = row["course"];
         course.name = course.code;
         course.section = int.parse(row["section"].toString().trim());
@@ -35,7 +32,6 @@ class DataLoaderService{
         course.roomNumber = row["room_no"].toString().trim();
         course.courseUsageType = CourseUsageType.AdvisingCourse;
         course.courseEntryType = CourseEntryType.AutomaticEntry;
-
         if(course.code.contains("LAB")){
           course.courseType = CourseType.LabCourse;
         }else{
@@ -58,6 +54,7 @@ class DataLoaderService{
               break;
             }
           }
+
           // if we didn't found another course, that means, this course is either a lab course or the first instance of this course, either way we'll have to insert it in the courses list.
           if(found == false){
             course.weekDay1 = getWeekDay( row["weekday"][0], row["time_from"], row["time_to"] );
@@ -65,14 +62,21 @@ class DataLoaderService{
           }
         }
       }
-      return courses;
-      // courses.forEach((element) {
-      //   print(element);
-      // });
+    }catch(ex){
+      throw ex;
+    }
+    return courses;
+  }
+  Future< List<Course> > readAdvisingCourseDataFromLocalJsonFile(String fileName) async {
+    List<Course> courses = List<Course>.empty(growable: true);
+    try{
+      var data = await this.readJsonFromFile("assets/data/$fileName.json");
+      courses = makeCoursesFromJsonData(data, fileName);
     }catch(ex){
       showError( "Data load error: $ex" );
       throw ex;
     }
+    return courses;
   }
 
   // mapCourse1ToCourse2ExceptMeta maps fields from a course to another course except the id, createdAt and updatedAt
@@ -88,10 +92,10 @@ class DataLoaderService{
     to.weekDay2 = from.weekDay2;
     return to;
   }
-  populateDBFromJsonFile(String name) async {
+  populateDBFromJsonFile(String fileName) async {
     int insertUpdateCount = 0;
     try{
-      var courses = await readAdvisingCourseDataFromLocalJson(name);
+      var courses = await readAdvisingCourseDataFromLocalJsonFile(fileName);
       BaseRepository<Course> repository = Get.find();
       for(int i=0;i<courses.length;i++){
         var course = courses[i];
@@ -147,9 +151,9 @@ class DataLoaderService{
   }
 
   DateTime convertAdvisingTimeToAMPM(String time){
-    DateTime pmStart = DateFormat("hh:mm").parse("12:00");
-    DateTime pmEnd = DateFormat("hh:mm").parse("07:00");
-    DateTime dateTime = DateFormat('hh:mm').parse(time);
+    DateTime pmStart = DateFormat("hh:mm").parse("12:00",true);
+    DateTime pmEnd = DateFormat("hh:mm").parse("07:59",true);
+    DateTime dateTime = DateFormat('hh:mm').parse(time,true);
     if( (dateTime.isAfter(pmStart) && dateTime.isBefore(pmEnd)) || pmStart.compareTo(dateTime) >= 0 ){
       dateTime = DateFormat("hh:mm a").parse("$time PM");
     }else{

@@ -45,6 +45,7 @@ class CourseService{
           visited[i] = true;
           list.add(allCourses[i]);
           findConflictFreeCourses(list, totalCourses);
+          list.remove( allCourses[i] );
           visited[i] = false;
         }
       }
@@ -64,22 +65,22 @@ class CourseService{
 
   // detectCourseTimeConflict detects conflict between 2 courses, if matchBothDays is set to true, then it will compare both weekDays, otherwise only the first weekDay
   bool detectCourseTimeConflict(Course course1, Course course2, [bool matchBothDays = true]){
-    if(courseDayConflicts( course1.weekDay1, course2.weekDay1 )){
+    if(detectConflictBetween2Days( course1.weekDay1, course2.weekDay1 )){
       return true;
     }
 
     if(matchBothDays &&
-        courseDayConflicts(course1.weekDay1, course2.weekDay2)
-        || courseDayConflicts(course1.weekDay2, course2.weekDay1)
-        || courseDayConflicts(course1.weekDay2, course2.weekDay2)
+        detectConflictBetween2Days(course1.weekDay1, course2.weekDay2)
+        || detectConflictBetween2Days(course1.weekDay2, course2.weekDay1)
+        || detectConflictBetween2Days(course1.weekDay2, course2.weekDay2)
     ){
       return true;
     }
     return false; // no conflict detected
   }
 
-  // courseDayConflicts detects conflict between 2 course days comparing their start time end time.
-  bool courseDayConflicts(CourseDay day1, CourseDay day2){
+  // detectConflictBetween2Days detects conflict between 2 course days comparing their start time end time.
+  bool detectConflictBetween2Days(CourseDay day1, CourseDay day2){
     // day1's start time is between day2's time.
     if( (day1.startTime.isAfter( day2.startTime ) && day1.startTime.isBefore(day2.endTime))
         || (day1.endTime.isAfter(day2.startTime) && day1.endTime.isBefore(day2.endTime))

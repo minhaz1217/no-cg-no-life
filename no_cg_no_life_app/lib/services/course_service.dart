@@ -81,6 +81,9 @@ class CourseService{
 
   // detectConflictBetween2Days detects conflict between 2 course days comparing their start time end time.
   bool detectConflictBetween2Days(CourseDay day1, CourseDay day2){
+    if(day1.weekDay != day2.weekDay){
+      return false;
+    }
     // day1's start time is between day2's time.
     if( (day1.startTime.isAfter( day2.startTime ) && day1.startTime.isBefore(day2.endTime))
         || (day1.endTime.isAfter(day2.startTime) && day1.endTime.isBefore(day2.endTime))

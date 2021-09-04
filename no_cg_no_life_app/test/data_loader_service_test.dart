@@ -1,6 +1,11 @@
 
 
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/intl.dart';
+import 'package:no_cg_no_life_app/enums/DayOfTheWeek.dart';
+import 'package:no_cg_no_life_app/models/CourseDay.dart';
+import 'package:no_cg_no_life_app/models/domain_models/Course.dart';
 import 'package:no_cg_no_life_app/services/data_loader_service.dart';
 
 main(){
@@ -30,7 +35,23 @@ main(){
       expect( dataLoaderService.convertAdvisingTimeToAMPM("7:50"), DateTime.tryParse("1970-01-01 19:50:00.000"), reason: "7.50 should be pm" );
     });
 
-    test("Test Name", (){
+    test("Testing course day", (){
+      // arrange
+      DataLoaderService dataLoaderService = new DataLoaderService();
+      // act
+      CourseDay courseDay1 = dataLoaderService.getWeekDay("s", "8:00", "12:50");
+      CourseDay courseDay2 = dataLoaderService.getWeekDay("A", "4:40", "7:50");
+      // assert
+      expect( courseDay1.weekDay, DayOfTheWeek.Sunday, reason: "s means sunday");
+      expect( courseDay1.startTime, DateTime.tryParse("1970-01-01 08:00:00.000"), reason: "8 is am");
+      expect( courseDay1.endTime, DateTime.tryParse("1970-01-01 12:50:00.000"), reason: "12.50 is pm");
+
+      expect( courseDay2.weekDay, DayOfTheWeek.Saturday, reason: "a means saturday");
+      expect( courseDay2.startTime, DateTime.tryParse("1970-01-01 16:40:00.000"), reason: "4.40 is pm");
+      expect( courseDay2.endTime, DateTime.tryParse("1970-01-01 19:50:00.000"), reason: "7.50 is pm");
+    });
+
+    test("testName", (){
       // arrange
 
       // act
@@ -38,5 +59,6 @@ main(){
       // assert
 
     });
+
   });
 }

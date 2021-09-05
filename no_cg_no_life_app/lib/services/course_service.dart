@@ -56,7 +56,7 @@ class CourseService{
   // detectCourseListConflict detects both same code conflict and same time conflict
   bool detectCourseListConflict( List<Course> currentList, Course nextCourse ){
     for(int i=0;i<currentList.length;i++){
-      if(detectCourseTimeConflict(currentList[i], nextCourse, nextCourse.courseType == CourseType.LabCourse ? false: true)){
+      if(detectCourseTimeConflict(currentList[i], nextCourse)){
         return true;
       }
     }
@@ -64,15 +64,19 @@ class CourseService{
   }
 
   // detectCourseTimeConflict detects conflict between 2 courses, if matchBothDays is set to true, then it will compare both weekDays, otherwise only the first weekDay
-  bool detectCourseTimeConflict(Course course1, Course course2, [bool matchBothDays = true]){
+  bool detectCourseTimeConflict(Course course1, Course course2){
+    var matchBothDays = true;
+    if(course1.courseType == CourseType.LabCourse || course2.courseType == CourseType.LabCourse){
+      matchBothDays = false;
+    }
     if(detectConflictBetween2Days( course1.weekDay1, course2.weekDay1 )){
       return true;
     }
 
-    if(matchBothDays &&
+    if(matchBothDays && (
         detectConflictBetween2Days(course1.weekDay1, course2.weekDay2)
         || detectConflictBetween2Days(course1.weekDay2, course2.weekDay1)
-        || detectConflictBetween2Days(course1.weekDay2, course2.weekDay2)
+        || detectConflictBetween2Days(course1.weekDay2, course2.weekDay2))
     ){
       return true;
     }

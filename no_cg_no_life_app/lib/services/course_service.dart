@@ -85,7 +85,9 @@ class CourseService{
       return false;
     }
     // day1's start time is between day2's time.
-    if( (day1.startTime.isAfter( day2.startTime ) && day1.startTime.isBefore(day2.endTime))
+    if(
+    day1.startTime.compareTo(day2.startTime) == 0 || day1.startTime.compareTo(day2.endTime) == 0 || day1.endTime.compareTo(day2.startTime) == 0 || day1.endTime.compareTo(day2.endTime) == 0 ||
+    (day1.startTime.isAfter( day2.startTime ) && day1.startTime.isBefore(day2.endTime))
         || (day1.endTime.isAfter(day2.startTime) && day1.endTime.isBefore(day2.endTime))
         || (day2.startTime.isAfter(day1.startTime ) && day2.startTime.isBefore(day1.endTime))
         || (day2.endTime.isAfter(day1.startTime) && day2.endTime.isBefore(day1.endTime))

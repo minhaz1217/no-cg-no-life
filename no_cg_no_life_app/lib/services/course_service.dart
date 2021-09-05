@@ -9,11 +9,17 @@ class CourseService{
   late List<Course> allCourses;
   late List< List<Course> > finalCourses;
 
+  CourseService(){
+    visited = new List<bool>.empty(growable: true);
+    finalCourses = new List< List<Course> >.empty(growable: true);
+    List<Course> allCourses = new List<Course>.empty(growable: true);
+  }
+
   // getConflictFreeCourses returns conflict free courses, from the list of courses and only outputs the required number of courses
   List<List<Course>> getConflictFreeCourses( List<Course> courses, int totalCourses ){
-    List<List<Course> > allConflictFreeCourses = List< List<Course> >.empty(growable: true);
+    finalCourses = new List< List<Course> >.empty(growable: true);
     if(courses.isEmpty){
-      return allConflictFreeCourses;
+      return finalCourses;
     }
 
     visited = new List<bool>.filled(courses.length, false);
@@ -29,13 +35,13 @@ class CourseService{
       });
     }
     // print("Number Of Courses : ${totalCourses}");
-    return allConflictFreeCourses;
+    return finalCourses;
   }
 
 
-  void findConflictFreeCourses(List<Course> list,int totalCourses){
+  void findConflictFreeCourses(List<Course> list, int totalCourses){
     if(list.length == totalCourses){
-      finalCourses.add(list);
+      finalCourses.add(List.from(list));
       return;
     }
 
@@ -50,17 +56,41 @@ class CourseService{
         }
       }
     }
-
+    return;
   }
 
   // detectCourseListConflict detects both same code conflict and same time conflict
   bool detectCourseListConflict( List<Course> currentList, Course nextCourse ){
     for(int i=0;i<currentList.length;i++){
-      if(detectCourseTimeConflict(currentList[i], nextCourse)){
+      // to take a lab course we need that lab course's complimentary course in the list
+      // to take a course that has a lab course we'll need to take both of them at the same time.
+      if( detectConflictOfLabCourses(currentList, nextCourse) || detectCourseNameOrCodeConflict(currentList[i], nextCourse) ||  detectCourseTimeConflict(currentList[i], nextCourse)){
         return true;
       }
     }
     return false; // no conflict
+  }
+
+  bool detectConflictOfLabCourses(List<Course> currentList, Course labCourse){
+    if(labCourse.courseType != CourseType.LabCourse || currentList.length <= 0){
+      return false; // no conflict, can this this course
+    }
+    var labCourseCode = labCourse.code.toLowerCase();
+    for(int i=0;i<currentList.length;i++){
+      if(currentList[i].courseType == CourseType.NormalCourse && ( labCourseCode.contains(currentList[i].code.toLowerCase())) ){
+        return true; // lab course's code contains normal course's code, CSE101LAB contains CSE101, so we can take CSE101Lab
+      }
+    }
+    return true; // conflict, can't take this next course, because this lab course's complimentary isn't in the list
+  }
+
+  // detectCourseNameOrCodeConflict detects conflict between code and names, as if we already have this course in our list, we should not be able to take it in this semester
+  bool detectCourseNameOrCodeConflict(Course course1, Course course2){
+    var code1 = course1.code.toLowerCase();
+    var code2 = course2.code.toLowerCase();
+    var name1 = course1.name.toLowerCase();
+    var name2 = course2.name.toLowerCase();
+    return code1 == code2 || name1 == name2 || code1 == name2 || code2 == name1;
   }
 
   // detectCourseTimeConflict detects conflict between 2 courses, if matchBothDays is set to true, then it will compare both weekDays, otherwise only the first weekDay

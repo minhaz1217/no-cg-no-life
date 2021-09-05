@@ -84,6 +84,41 @@ void main() {
 
     });
 
+    test("Detect course list conflict test", (){
+      // arrange
+      DataLoaderService dataLoaderService = new DataLoaderService();
+      CourseService courseService = new CourseService();
+
+      List<Course> courses = new List<Course>.empty( growable: true );
+      CourseDay courseDay1 = dataLoaderService.getWeekDay("s", "8:30", "10:00");
+      CourseDay courseDay2 = dataLoaderService.getWeekDay("s", "10:10", "11:40");
+      CourseDay courseDay3 = dataLoaderService.getWeekDay("s", "11:50", "1:20");
+      CourseDay courseDay4 = dataLoaderService.getWeekDay("s", "1:30", "3:00");
+      courses.add( new Course(courseCode: "CSE101", weekDay1: courseDay1.weekDay, day1StartTime: courseDay1.startTime, day1EndTime: courseDay1.endTime, weekDay2: DayOfTheWeek.Tuesday, day2StartTime: courseDay1.startTime, day2EndTime: courseDay1.endTime) );
+      courses.add( new Course(courseCode: "CSE102", weekDay1: courseDay2.weekDay, day1StartTime: courseDay2.startTime, day1EndTime: courseDay2.endTime, weekDay2: DayOfTheWeek.Tuesday, day2StartTime: courseDay2.startTime, day2EndTime: courseDay2.endTime) );
+      courses.add( new Course(courseCode: "CSE103", weekDay1: courseDay4.weekDay, day1StartTime: courseDay4.startTime, day1EndTime: courseDay4.endTime, weekDay2: DayOfTheWeek.Tuesday, day2StartTime: courseDay4.startTime, day2EndTime: courseDay4.endTime) );
+      // act
+
+      // assert
+      expect( courseService.detectCourseListConflict(courses, new Course(courseCode: "CSE104", weekDay1: DayOfTheWeek.Monday, day1StartTime: courseDay1.startTime, day1EndTime: courseDay1.endTime, weekDay2: DayOfTheWeek.Wednesday, day2StartTime: courseDay1.startTime, day2EndTime: courseDay1.endTime) ), false, reason: "Different week day shouldn't conflict" );
+      expect( courseService.detectCourseListConflict(courses, new Course(courseCode: "CSE104", weekDay1: DayOfTheWeek.Sunday, day1StartTime: courseDay3.startTime, day1EndTime: courseDay3.endTime, weekDay2: DayOfTheWeek.Tuesday, day2StartTime: courseDay3.startTime, day2EndTime: courseDay3.endTime) ), false, reason: "Same week day, different time shouldn't conflict" );
+      expect( courseService.detectCourseListConflict(courses, new Course(courseCode: "CSE104", weekDay1: DayOfTheWeek.Sunday, day1StartTime: courseDay1.startTime, day1EndTime: courseDay1.endTime, weekDay2: DayOfTheWeek.Wednesday, day2StartTime: courseDay1.startTime, day2EndTime: courseDay1.endTime) ), true, reason: "First week day matches should conflict" );
+      expect( courseService.detectCourseListConflict(courses, new Course(courseCode: "CSE104", weekDay1: DayOfTheWeek.Monday, day1StartTime: courseDay1.startTime, day1EndTime: courseDay1.endTime, weekDay2: DayOfTheWeek.Tuesday, day2StartTime: courseDay1.startTime, day2EndTime: courseDay1.endTime) ), true, reason: "Second week day matches should conflict" );
+    });
+
+
+    test("getting conflict free courses", () async {
+      // arrange
+      DataLoaderService dataLoaderService = new DataLoaderService();
+      CourseService courseService = new CourseService();
+
+      var data = await getCoursesForConflictTest(courseNames);
+      // act
+      var courses = courseService.getConflictFreeCourses(data, 3);
+
+      // assert
+      expect(courses.length > 0, true, reason: "Should return at least something");
+    });
     test("Test Name", (){
       // arrange
 
